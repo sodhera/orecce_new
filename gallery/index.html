@@ -319,7 +319,7 @@ function renderWall() {
     t.textContent = p.title || p.slug;
     const d = document.createElement('div');
     d.className = 'd';
-    d.textContent = [p.direction && p.direction.name, p.created && p.created.slice(0, 10)]
+    d.textContent = [p.direction && p.direction.name, p.dna && p.dna.motion]
       .filter(Boolean).join(' · ');
     cap.appendChild(t); cap.appendChild(d);
     art.appendChild(cap);

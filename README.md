@@ -14,25 +14,22 @@ arrow keys.
 
 ---
 
-## ⚡ The one-paste prompt
+## ⚡ Installation is one sentence
 
-Paste this into **Codex** or **Claude Code**. That's the whole installation.
+Paste this into **Codex** or **Claude Code**. Done.
 
 ```
-Clone https://github.com/sodhera/orecce_new (or `git pull` inside it if it already
-exists locally). From now on, whenever I ask you to design, mock up, or build anything
-visual, first read visual-guru/SKILL.md in that repo and follow it exactly. When I ask
-you to generate something, hang the pieces in the repo's gallery as SKILL.md describes,
-start the gallery with `npm start` in the repo (Node 18+, zero dependencies), and give
-me the localhost URL.
+Clone https://github.com/sodhera/orecce_new and follow its AGENTS.md.
 ```
+
+The repo's `AGENTS.md`/`CLAUDE.md` (which both agents read automatically) handles the
+rest: pull latest, start the gallery, and from then on any "generate/design/mock up X"
+request goes through the Visual Guru skill and lands on the wall. Every session begins
+with `git pull` — auto-updating by design.
 
 Then just talk: *"generate a booking site for a family-run trekking lodge in Manang —
 warm, credible, not a tourism cliché."* Minutes later there are three framed directions
-on the wall.
-
-Because the prompt starts with `git pull`, every session picks up the latest skill and
-every piece anyone pushed — auto-updating by design.
+on the wall, each one moving.
 
 ## The wall
 
@@ -42,10 +39,16 @@ npm start        # → http://127.0.0.1:4630
 
 - Click a frame to view a piece full-size; **← →** to walk the wall; **Esc** to step back.
 - Desktop / phone width toggle in the viewer; every piece opens in its own tab too.
-- The wall ships with six pieces: three hand-directed benchmarks (a premium Himalayan
-  tea house, a dense Nepali legal-research bench, a playful song-guessing game — one
-  skill, three different kinds of beauty) and three agent-generated directions for a
-  Manang trekking lodge, exactly as Codex hung them.
+- The wall ships with **twelve pieces**, and every one moves: hand-directed flagships
+  demonstrating the three viral motion patterns (a grinder that assembles as you
+  scroll, a type foundry whose letters swell around your cursor, a weather station
+  that lives on its own) alongside benchmarks and Codex-generated pieces — a tea
+  house, a legal bench, a party game, a jazz club, a kids' reading app, an
+  architecture portfolio, a produce dashboard, a sci-fi imprint, a trekking lodge.
+- Range is enforced, not hoped for: every piece declares its **design DNA** (eight
+  axes — palette, type voice, layout, density, motion, shape, texture, archetype) and
+  `node gallery/dna.js` measures the wall: new pieces must differ from everything hung
+  on ≥ 4 axes, and no single vibe may dominate.
 
 ## What's in the repo
 

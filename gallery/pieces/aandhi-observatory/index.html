@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aandhi Station — live from 5,050 m</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night: #0b1026;
+  --night-2: #111737;
+  --haze: #1c2450;
+  --ice: #9fd8e8;
+  --ice-bright: #d7f2fa;
+  --moon: #e8e4d8;
+  --dim: #6b74a3;
+  --line: rgba(159,216,232,.14);
+  --sans: "Sora", -apple-system, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: linear-gradient(180deg, #070a1c 0%, var(--night) 34%, #131a3e 78%, #1a2148 100%);
+  color: var(--ice-bright);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--ice); outline-offset: 3px; }
+
+#sky { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+.shell { position: relative; z-index: 1; max-width: 1160px; margin: 0 auto; padding: 0 clamp(18px, 4vw, 44px); }
+
+header {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 14px;
+  padding: 26px 0 0;
+}
+.mark { font-weight: 600; font-size: 17px; letter-spacing: .04em; }
+.mark small { display: block; font: 400 10px var(--mono); letter-spacing: .26em; color: var(--dim); margin-top: 2px; }
+.live {
+  display: flex; align-items: center; gap: 8px;
+  font: 500 11px var(--mono); letter-spacing: .14em; color: var(--ice);
+}
+.live .dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--ice);
+  animation: breathe 3.2s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(159,216,232,.5); }
+  50% { box-shadow: 0 0 0 7px rgba(159,216,232,0); }
+}
+
+.hero { padding: clamp(40px, 7vh, 84px) 0 clamp(28px, 4vh, 48px); }
+.hero h1 {
+  font-weight: 300;
+  font-size: clamp(34px, 5.6vw, 62px);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  max-width: 22ch;
+}
+.hero h1 b { font-weight: 600; color: var(--ice); }
+.hero p { color: var(--dim); max-width: 52ch; margin-top: 16px; font-size: 15.5px; }
+
+/* instruments */
+.deck {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  backdrop-filter: blur(6px);
+}
+.inst { background: rgba(17,23,55,.72); padding: 20px 22px 18px; }
+.inst .k {
+  display: flex; justify-content: space-between;
+  font: 400 10px var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--dim);
+}
+.inst .v {
+  font-weight: 300; font-size: 40px; letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  margin-top: 8px; line-height: 1;
+}
+.inst .v small { font-size: 15px; color: var(--dim); font-weight: 400; }
+.inst .trend { font: 400 11px var(--mono); margin-top: 8px; color: var(--dim); }
+.inst .trend.up { color: #8fd6a8; }
+.inst .trend.down { color: #e8a2a2; }
+.inst svg.spark { display: block; width: 100%; height: 34px; margin-top: 12px; overflow: visible; }
+.inst .spark path { fill: none; stroke: var(--ice); stroke-width: 1.4; }
+.inst .spark .fill { fill: url(#sparkfill); stroke: none; opacity: .5; }
+
+/* wind compass */
+.compass-wrap { display: flex; gap: 16px; align-items: center; }
+.compass { width: 74px; height: 74px; flex: none; }
+.compass circle { fill: none; stroke: var(--line); }
+.compass .needle { transition: transform 2.4s cubic-bezier(.3,.7,.3,1); transform-origin: 37px 37px; }
+
+/* log */
+.log-band { margin: clamp(36px, 6vh, 64px) 0; }
+.log-band h2 {
+  font: 500 11px var(--mono); letter-spacing: .24em; text-transform: uppercase; color: var(--dim);
+  margin-bottom: 14px;
+}
+.log {
+  border-left: 1px solid var(--line);
+  max-height: 236px;
+  overflow: hidden;
+  position: relative;
+}
+.log::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 70px;
+  background: linear-gradient(transparent, rgba(11,16,38,.95));
+}
+.entry {
+  display: grid; grid-template-columns: 92px 1fr; gap: 14px;
+  padding: 9px 0 9px 18px;
+  font-size: 13.5px;
+}
+.entry.fresh { animation: land .5s ease-out; }
+@keyframes land { from { opacity: 0; transform: translateY(-8px); } }
+.entry time { font: 400 11.5px var(--mono); color: var(--dim); padding-top: 2px; font-variant-numeric: tabular-nums; }
+.entry .tag { color: var(--ice); font-weight: 600; }
+
+/* footer band */
+.about {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: clamp(20px, 4vw, 48px);
+  padding: 30px 0 20px;
+  border-top: 1px solid var(--line);
+}
+.about h3 { font: 500 10.5px var(--mono); letter-spacing: .22em; text-transform: uppercase; color: var(--dim); margin-bottom: 8px; }
+.about p { font-size: 13.5px; color: #aab2d6; }
+.about a { color: var(--ice); }
+footer { padding: 18px 0 30px; font: 400 11px var(--mono); color: var(--dim); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+
+@media (max-width: 640px) { .inst .v { font-size: 32px; } }
+@media (prefers-reduced-motion: reduce) {
+  .live .dot { animation: none; }
+  .entry.fresh { animation: none; }
+  * { transition-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="sky" aria-hidden="true"></canvas>
+
+<div class="shell">
+  <header>
+    <div class="mark">AANDHI STATION<small>THORONG LA · 5,050 M · AWS-04</small></div>
+    <span class="live"><span class="dot"></span>LIVE · <span id="clock">--:--:--</span> NPT</span>
+  </header>
+
+  <section class="hero">
+    <h1>The mountain's weather, <b>as it happens</b> — for the people walking through it.</h1>
+    <p>An automatic weather station on the Thorong La pass, read every twenty seconds and
+    relayed by radio to Manang and Muktinath. Guides check it at dawn. You can check it
+    always.</p>
+  </section>
+
+  <section class="deck" aria-label="Live instruments">
+    <div class="inst">
+      <div class="k"><span>Air temp</span><span>2 m</span></div>
+      <div class="v"><span id="temp">−8.2</span><small> °C</small></div>
+      <div class="trend down" id="temp-trend">▾ falling · −1.1° / hr</div>
+      <svg class="spark" viewBox="0 0 200 34" preserveAspectRatio="none">
+        <defs><linearGradient id="sparkfill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#9fd8e8" stop-opacity=".35"/>
+          <stop offset="1" stop-color="#9fd8e8" stop-opacity="0"/>
+        </linearGradient></defs>
+        <path class="fill" id="spark-temp-fill"/><path id="spark-temp"/>
+      </svg>
+    </div>
+    <div class="inst">
+      <div class="k"><span>Wind</span><span>gusting</span></div>
+      <div class="compass-wrap">
+        <div>
+          <div class="v"><span id="wind">46</span><small> km/h</small></div>
+          <div class="trend" id="wind-dir">from WSW · gusts to <span id="gust">61</span></div>
+        </div>
+        <svg class="compass" viewBox="0 0 74 74" aria-hidden="true">
+          <circle cx="37" cy="37" r="34" stroke-width="1"/>
+          <circle cx="37" cy="37" r="2" fill="#9fd8e8" stroke="none"/>
+          <g class="needle" id="needle">
+            <path d="M37 8 L41 37 L37 44 L33 37 Z" fill="#9fd8e8"/>
+          </g>
+          <text x="37" y="6.5" font-size="7" fill="#6b74a3" text-anchor="middle">N</text>
+        </svg>
+      </div>
+    </div>
+    <div class="inst">
+      <div class="k"><span>Pressure</span><span>QFE</span></div>
+      <div class="v"><span id="pressure">548.1</span><small> hPa</small></div>
+      <div class="trend up" id="pressure-trend">▴ rising slowly · good sign</div>
+      <svg class="spark" viewBox="0 0 200 34" preserveAspectRatio="none">
+        <path class="fill" id="spark-press-fill"/><path id="spark-press"/>
+      </svg>
+    </div>
+    <div class="inst">
+      <div class="k"><span>Pass verdict</span><span>04:00–10:00</span></div>
+      <div class="v" style="font-size:26px;line-height:1.25;font-weight:400">Crossable<br><span style="color:var(--ice)">before 09:30</span></div>
+      <div class="trend">wind over 70 km/h likely after 10:00</div>
+    </div>
+  </section>
+
+  <section class="log-band">
+    <h2>Station log — appended automatically</h2>
+    <div class="log" id="log" aria-live="polite"></div>
+  </section>
+
+  <section class="about">
+    <div>
+      <h3>Who runs this</h3>
+      <p>The station is maintained by the Manang porters' cooperative with the DHM.
+      Solar-powered, yak-proof enclosure, serviced each October.</p>
+    </div>
+    <div>
+      <h3>Reading the verdict</h3>
+      <p>“Crossable” weighs wind, wind-chill, and visibility against the slowest party on
+      the trail that morning — not against a fit guide. When in doubt, it says so.</p>
+    </div>
+    <div>
+      <h3>Get it by radio</h3>
+      <p>Broadcast at 05:00 and 05:30 on <a href="#">144.425 MHz</a> from Manang. Lodge
+      owners repeat it at breakfast.</p>
+    </div>
+  </section>
+
+  <footer>
+    <span>AANDHI · a public instrument, not a product</span>
+    <span>data CC-BY · station AWS-04 · uptime 371 days</span>
+  </footer>
+</div>
+
+<script>
+'use strict';
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ——— clock
+  const clock = document.getElementById('clock');
+  const tickClock = () => {
+    const now = new Date(Date.now() + (5.75 * 60 - new Date().getTimezoneOffset()) * 60000);
+    clock.textContent = now.toISOString().slice(11, 19);
+  };
+  tickClock(); setInterval(tickClock, 1000);
+
+  // ——— sky canvas: stars + wind-driven snow streaks + drifting cloud
+  const cv = document.getElementById('sky');
+  const ctx = cv.getContext('2d');
+  let W, H, stars = [], flakes = [];
+  let windSpeed = 46; // shared with instruments
+
+  function size() {
+    W = cv.width = innerWidth * devicePixelRatio;
+    H = cv.height = innerHeight * devicePixelRatio;
+    cv.style.width = innerWidth + 'px'; cv.style.height = innerHeight + 'px';
+    stars = Array.from({ length: 110 }, () => ({
+      x: Math.random() * W, y: Math.random() * H * .7,
+      r: Math.random() * 1.3 + .3, tw: Math.random() * Math.PI * 2,
+    }));
+    flakes = Array.from({ length: 130 }, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      z: Math.random() * .7 + .3,
+    }));
+  }
+  size(); addEventListener('resize', size, { passive: true });
+
+  let visible = true;
+  document.addEventListener('visibilitychange', () => { visible = !document.hidden; });
+
+  let t = 0;
+  function sky() {
+    requestAnimationFrame(sky);
+    if (!visible || reduce) return;
+    t += 0.016;
+    ctx.clearRect(0, 0, W, H);
+
+    // stars twinkle
+    ctx.fillStyle = '#d7f2fa';
+    for (const s of stars) {
+      ctx.globalAlpha = .25 + .55 * Math.abs(Math.sin(t * .6 + s.tw));
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r * devicePixelRatio, 0, 7); ctx.fill();
+    }
+
+    // moon
+    ctx.globalAlpha = .9;
+    const mx = W * .82, my = H * .16, mr = 26 * devicePixelRatio;
+    ctx.fillStyle = '#e8e4d8';
+    ctx.beginPath(); ctx.arc(mx, my, mr, 0, 7); ctx.fill();
+    ctx.fillStyle = '#0b1026'; ctx.globalAlpha = .88;
+    ctx.beginPath(); ctx.arc(mx - mr * .42, my - mr * .18, mr * .92, 0, 7); ctx.fill();
+
+    // wind streak snow
+    const wv = windSpeed / 8;
+    ctx.strokeStyle = 'rgba(215,242,250,.5)';
+    ctx.lineWidth = devicePixelRatio;
+    for (const f of flakes) {
+      f.x -= (wv * f.z + .4) * devicePixelRatio;
+      f.y += (.5 * f.z) * devicePixelRatio;
+      if (f.x < -20) { f.x = W + 10; f.y = Math.random() * H; }
+      if (f.y > H + 10) { f.y = -10; f.x = Math.random() * W; }
+      ctx.globalAlpha = .18 + .4 * f.z;
+      ctx.beginPath();
+      ctx.moveTo(f.x, f.y);
+      ctx.lineTo(f.x + wv * f.z * 2.4 * devicePixelRatio, f.y - .8 * devicePixelRatio);
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+  }
+  sky();
+
+  // ——— sparklines
+  const tempHist = Array.from({ length: 40 }, (_, i) => -6.5 - i * .045 - Math.random() * .4);
+  const pressHist = Array.from({ length: 40 }, (_, i) => 547.2 + i * .02 + Math.random() * .3);
+  function drawSpark(id, hist) {
+    const min = Math.min(...hist), max = Math.max(...hist), span = (max - min) || 1;
+    const pts = hist.map((v, i) =>
+      `${(i / (hist.length - 1)) * 200},${32 - ((v - min) / span) * 28}`);
+    document.getElementById(id).setAttribute('d', 'M' + pts.join(' L'));
+    document.getElementById(id + '-fill').setAttribute('d',
+      'M' + pts.join(' L') + ' L200,34 L0,34 Z');
+  }
+
+  // ——— live ticks
+  const $id = (x) => document.getElementById(x);
+  let temp = -8.2, wind = 46, gust = 61, press = 548.1, dirDeg = 246;
+  function tickData() {
+    temp += (Math.random() - .55) * .15;
+    wind = Math.max(18, Math.min(78, wind + (Math.random() - .5) * 4));
+    gust = Math.max(wind + 6, gust + (Math.random() - .5) * 5);
+    press += (Math.random() - .45) * .12;
+    dirDeg += (Math.random() - .5) * 10;
+    windSpeed = wind;
+
+    $id('temp').textContent = temp.toFixed(1).replace('-', '−');
+    $id('wind').textContent = Math.round(wind);
+    $id('gust').textContent = Math.round(gust);
+    $id('pressure').textContent = press.toFixed(1);
+    $id('needle').style.transform = `rotate(${Math.round(dirDeg)}deg)`;
+
+    tempHist.push(temp); tempHist.shift();
+    pressHist.push(press); pressHist.shift();
+    drawSpark('spark-temp', tempHist);
+    drawSpark('spark-press', pressHist);
+  }
+  drawSpark('spark-temp', tempHist);
+  drawSpark('spark-press', pressHist);
+  if (!reduce) setInterval(tickData, 4000);
+
+  // ——— station log feed
+  const LOG = [
+    ['AUTO', 'gust 61 km/h from WSW — strongest of the morning'],
+    ['MANANG', 'radio check OK, repeated to Yak Kharka lodges'],
+    ['AUTO', 'pressure trend +0.4 hPa over 3 hr — clearing likely'],
+    ['GUIDE', 'party of 6 departed Thorong Phedi 04:40, reported at High Camp 06:10'],
+    ['AUTO', 'temperature −8.2 °C, wind-chill −19 °C at ridge'],
+    ['MUKTINATH', 'east side clear, trail icy above 4,800 m'],
+    ['AUTO', 'battery 92% · solar charging resumed at 06:02'],
+  ];
+  const log = document.getElementById('log');
+  let li = 0, lt = 6 * 3600 + 12 * 60;
+  function addEntry(fresh) {
+    const [tag, text] = LOG[li % LOG.length]; li++;
+    lt += 300 + Math.floor(Math.random() * 400);
+    const hh = String(Math.floor(lt / 3600)).padStart(2, '0');
+    const mm = String(Math.floor((lt % 3600) / 60)).padStart(2, '0');
+    const el = document.createElement('div');
+    el.className = 'entry' + (fresh ? ' fresh' : '');
+    el.innerHTML = `<time>${hh}:${mm} NPT</time><span><span class="tag">${tag}</span> — ${text}</span>`;
+    log.prepend(el);
+    while (log.children.length > 9) log.lastChild.remove();
+  }
+  for (let i = 0; i < 5; i++) addEntry(false);
+  if (!reduce) setInterval(() => addEntry(true), 6000);
+})();
+</script>
+</body>
+</html>

@@ -82,6 +82,36 @@ translate with `knowledge/intent-translation.md`. Never use the cliché mapping
 - No horizontal overflow at 390px. Hierarchy survives every viewport.
 - Motion is purposeful and fast (most transitions 150–350ms, ease-out); it never blocks.
 
+## Variation is measured, not felt (hard)
+
+Before designing, read the wall's design DNA (`node gallery/dna.js`, or the `dna` blocks
+in `gallery/pieces/*/piece.json`) and choose coordinates per
+`knowledge/variation-axes.md`: **a new piece must differ from every existing piece on
+≥ 4 of 8 axes; sibling directions for one request must differ on ≥ 5; no axis value may
+dominate more than ~40% of the wall.** Declare the DNA honestly in `piece.json`. If you
+notice yourself reaching for a favorite palette, typeface, or layout again — that is the
+failure this rule exists to catch.
+
+## Things must move (hard)
+
+Every piece ships at least one **earned motion signature** chosen from
+`knowledge/motion-and-interaction.md` — scroll-driven assembly, cursor-reactive
+surfaces, ambient life, or choreographed entrances — plus micro-interactions on
+everything interactive. Static mockups are unfinished. Motion follows the performance
+and reduced-motion rules in that file without exception.
+
+## Token discipline
+
+You are spending the user's tokens; craft, don't churn.
+- Load knowledge selectively: this file always; `motion-and-interaction.md` when
+  building; `variation-axes.md` before choosing DNA; the other knowledge files only when
+  their topic is genuinely in play.
+- Design fully before writing code; one build pass, one judged fix pass. No exploratory
+  rewrites.
+- One self-contained file per piece. No packages, no builds, no scaffolding.
+- Default three directions for a new concept; ONE piece when the user says "quick" or
+  asks for a refinement. Never generate variants nobody asked for beyond the default.
+
 ## The gallery (default deliverable)
 
 When the user asks you to generate, mock up, or show something, the deliverable is
@@ -93,6 +123,7 @@ GitHub.
 
 Full knowledge base: `knowledge/foundations.md`, `knowledge/intent-translation.md`,
 `knowledge/product-archetypes.md`, `knowledge/anti-patterns.md`,
+`knowledge/motion-and-interaction.md`, `knowledge/variation-axes.md`,
 `knowledge/evaluation-rubric.md`. Workflows: `workflows/generate-to-gallery.md`,
 `workflows/create-from-scratch.md`, `workflows/redesign-existing.md`,
 `workflows/refine.md`.

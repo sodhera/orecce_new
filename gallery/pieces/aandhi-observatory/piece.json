@@ -1,0 +1,21 @@
+{
+  "title": "Aandhi Station — live from the pass",
+  "prompt": "A public page for a mountain weather station on the Thorong La pass that trekkers and guides check before crossing. It should feel alive — the mountain's weather as it happens.",
+  "direction": {
+    "name": "Blue hour instrument",
+    "thesis": "A night-sky public instrument, not a product: living wind and snow across the whole page, instrument-panel data set in light Sora and mono, and a plain-language verdict a guide can trust at 4 a.m.",
+    "signature": "The page IS the weather: a canvas of stars, moon, and wind-driven snow whose streak velocity tracks the live wind reading, while instruments tick and the station log appends itself."
+  },
+  "dna": {
+    "archetype": "cultural",
+    "palette": { "value": "dark", "temperature": "cool", "accent_hue": 195, "saturation": "moderate" },
+    "type_voice": "mono",
+    "layout": "single-column",
+    "density": "medium",
+    "motion": "ambient",
+    "shape": "organic",
+    "texture": "gradient-atmosphere"
+  },
+  "created": "2026-07-18T12:30:00Z",
+  "generatedBy": "hand-directed flagship · ambient pattern"
+}

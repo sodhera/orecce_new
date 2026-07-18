@@ -13,6 +13,7 @@ gallery/pieces/<slug>/
   index.html    one complete, self-contained product mockup
   piece.json    {"title": "...", "prompt": "<the user's request>",
                  "direction": {"name": "...", "thesis": "...", "signature": "..."},
+                 "dna": { ...eight axes, see ../knowledge/variation-axes.md... },
                  "created": "<ISO timestamp>", "generatedBy": "<agent · lens>"}
 ```
 
@@ -29,16 +30,20 @@ gallery/pieces/<slug>/
 
 ## Procedure
 
-1. Follow `create-from-scratch.md` (brief → archetype → thesis → signature) — once per
-   direction.
-2. Produce **three directions by default** (fewer only if the user asks): the
-   *confident default*, a *typography-led* take, and an *unexpected angle* that still
-   fits. Each is its own piece with its own slug (`<concept>-a/b/c` or named suffixes).
-   The directions must not be reskins of each other.
-3. Hang them: write the folders, then tell the user to open the gallery
+1. **Read the wall's DNA first** (`node gallery/dna.js` or the `piece.json` files) and
+   pick coordinates per `../knowledge/variation-axes.md` — new pieces ≥ 4 axes from
+   everything hung, sibling directions ≥ 5 axes from each other.
+2. Follow `create-from-scratch.md` (brief → archetype → thesis → signature) — once per
+   direction — and give each piece one earned motion signature from
+   `../knowledge/motion-and-interaction.md`.
+3. Produce **three directions by default** (ONE when the user says "quick" or is
+   refining): the *confident default*, a *typography-led* take, and an *unexpected
+   angle* that still fits. Each is its own piece with its own slug. The directions must
+   not be reskins of each other — the DNA distance rule enforces this.
+4. Hang them: write the folders, then tell the user to open the gallery
    (`npm start` in the repo → http://127.0.0.1:4630, or just refresh if it's running).
-4. Judge each rendered piece against `../knowledge/evaluation-rubric.md` before calling
-   it done; fix hard failures immediately.
+5. Judge each rendered piece against `../knowledge/evaluation-rubric.md`, run
+   `node gallery/dna.js` to verify range, and fix hard failures immediately.
 
 ## Refinements
 

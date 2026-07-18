@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VETTA GR-1 — the last grinder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --coal: #16181b;
+  --coal-2: #1d2024;
+  --steel: #aeb4bb;
+  --steel-bright: #dfe3e8;
+  --safety: #ff5a1f;
+  --grid: #24282d;
+  --sans: "Archivo", -apple-system, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--coal);
+  color: var(--steel-bright);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+:focus-visible { outline: 2px solid var(--safety); outline-offset: 3px; }
+a { color: inherit; }
+
+/* header */
+header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px clamp(18px, 4vw, 48px);
+  mix-blend-mode: difference;
+}
+.mark { font-weight: 800; font-size: 17px; letter-spacing: .08em; }
+.mark span { color: var(--safety); }
+header .mono-link {
+  font: 500 11px var(--mono); letter-spacing: .12em; text-transform: uppercase;
+  text-decoration: none; border-bottom: 1px solid transparent;
+}
+header .mono-link:hover { border-color: currentColor; }
+
+/* intro */
+.intro {
+  min-height: 92vh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 0 clamp(18px, 4vw, 48px) 8vh;
+  background:
+    linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 100% 72px,
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 72px 100%,
+    var(--coal);
+}
+.intro .no { font: 400 12px var(--mono); color: var(--safety); letter-spacing: .2em; }
+.intro h1 {
+  font-weight: 800;
+  font-size: clamp(52px, 11vw, 148px);
+  line-height: .92;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  margin-top: 10px;
+}
+.intro h1 em { font-style: normal; color: var(--steel); }
+.intro .row {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  gap: 24px; margin-top: 28px; flex-wrap: wrap;
+}
+.intro p { max-width: 42ch; color: var(--steel); font-size: 15.5px; }
+.scroll-cue { font: 400 11px var(--mono); color: var(--steel); letter-spacing: .18em; text-transform: uppercase; }
+.scroll-cue::after {
+  content: "↓"; display: inline-block; margin-left: 8px;
+  animation: cue 1.6s ease-in-out infinite;
+}
+@keyframes cue { 50% { transform: translateY(5px); } }
+
+/* ————— the assembly ————— */
+#assembly { height: 460vh; position: relative; }
+.stage {
+  position: sticky; top: 0; height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
+  align-items: center;
+  overflow: hidden;
+  padding: 0 clamp(18px, 4vw, 48px);
+  gap: 24px;
+}
+.rig { position: relative; height: min(86vh, 720px); }
+.rig svg { width: 100%; height: 100%; display: block; }
+.rig .part { will-change: transform, opacity; }
+
+.readout {
+  position: relative; height: 300px;
+}
+.step {
+  position: absolute; inset: 0;
+  opacity: 0; transform: translateY(24px);
+  transition: opacity .35s ease, transform .35s ease;
+  pointer-events: none;
+}
+.step.on { opacity: 1; transform: none; }
+.step .k { font: 500 11px var(--mono); color: var(--safety); letter-spacing: .2em; }
+.step h2 { font-weight: 800; font-size: clamp(24px, 2.6vw, 34px); text-transform: uppercase; letter-spacing: -0.01em; margin: 10px 0 12px; }
+.step p { color: var(--steel); font-size: 15px; max-width: 40ch; }
+.step table { margin-top: 18px; border-collapse: collapse; font: 400 12.5px var(--mono); }
+.step td { padding: 5px 18px 5px 0; color: var(--steel); }
+.step td:last-child { color: var(--steel-bright); font-variant-numeric: tabular-nums; }
+
+.progress {
+  position: absolute; left: clamp(18px, 4vw, 48px); bottom: 26px;
+  display: flex; align-items: center; gap: 12px;
+  font: 400 11px var(--mono); color: var(--steel); letter-spacing: .16em;
+}
+.progress .bar { width: 140px; height: 2px; background: var(--grid); }
+.progress .bar i { display: block; height: 100%; width: 0; background: var(--safety); }
+
+/* specs strip */
+.specs {
+  border-top: 1px solid var(--grid);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+.specs > div { padding: 34px clamp(18px, 3vw, 40px); border-left: 1px solid var(--grid); }
+.specs > div:first-child { border-left: none; }
+.specs .v { font-weight: 800; font-size: 32px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.specs .v small { font-size: 15px; color: var(--steel); font-weight: 600; }
+.specs .k { font: 400 11px var(--mono); color: var(--steel); letter-spacing: .16em; text-transform: uppercase; margin-top: 6px; }
+
+/* order */
+.order {
+  padding: clamp(60px, 9vw, 120px) clamp(18px, 4vw, 48px);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 28px; flex-wrap: wrap;
+  border-top: 1px solid var(--grid);
+}
+.order h2 { font-weight: 800; font-size: clamp(30px, 4.6vw, 56px); text-transform: uppercase; letter-spacing: -0.02em; max-width: 14ch; line-height: 1; }
+.order .buy { text-align: right; }
+.order .price { font: 500 14px var(--mono); color: var(--steel); }
+.order .price b { color: var(--steel-bright); font-size: 22px; }
+.order button {
+  margin-top: 14px;
+  font: 800 15px var(--sans); letter-spacing: .06em; text-transform: uppercase;
+  color: var(--coal); background: var(--safety);
+  border: none; padding: 16px 34px; cursor: pointer;
+  transition: transform .12s ease, background .12s;
+}
+.order button:hover { background: #ff7040; }
+.order button:active { transform: scale(.96); }
+.order .note { font: 400 11px var(--mono); color: var(--steel); margin-top: 10px; }
+
+footer {
+  border-top: 1px solid var(--grid);
+  padding: 22px clamp(18px, 4vw, 48px);
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  font: 400 11.5px var(--mono); color: var(--steel);
+}
+
+@media (max-width: 880px) {
+  .stage { grid-template-columns: 1fr; grid-template-rows: minmax(0,1fr) auto; padding-bottom: 20px; }
+  .rig { height: auto; min-height: 0; }
+  .readout { height: 240px; }
+  .step p { max-width: none; }
+  .progress { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue::after { animation: none; }
+  #assembly { height: auto; }
+  .stage { position: static; height: auto; padding-top: 40px; }
+  .readout { height: auto; }
+  .step { position: static; opacity: 1; transform: none; margin-bottom: 34px; }
+  .rig .part { transform: none !important; opacity: 1 !important; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="mark">VETTA<span>.</span></div>
+  <a class="mono-link" href="#order">Order · Batch 04</a>
+</header>
+
+<section class="intro">
+  <span class="no">GR-1 · SINGLE-DOSE CONICAL GRINDER</span>
+  <h1>Built once.<br><em>Buried with you.</em></h1>
+  <div class="row">
+    <p>Eleven machined parts. No plastic, no firmware, no subscription. Scroll, and we
+    will put it together in front of you — every part, in order, nothing hidden.</p>
+    <span class="scroll-cue">Scroll to assemble</span>
+  </div>
+</section>
+
+<div id="assembly">
+  <div class="stage">
+    <div class="rig" aria-hidden="true">
+      <svg viewBox="0 0 400 720" fill="none">
+        <!-- centerline -->
+        <line x1="200" y1="8" x2="200" y2="712" stroke="#24282d" stroke-dasharray="2 8"/>
+
+        <!-- BASE -->
+        <g class="part" id="p-base">
+          <rect x="118" y="600" width="164" height="34" rx="4" fill="#2a2e34"/>
+          <rect x="118" y="628" width="164" height="8" rx="3" fill="#0e0f11"/>
+          <rect x="132" y="608" width="26" height="6" rx="3" fill="#3a4048"/>
+        </g>
+        <!-- CRADLE -->
+        <g class="part" id="p-cradle">
+          <path d="M150 560 h100 v18 a8 8 0 0 1 -8 8 h-84 a8 8 0 0 1 -8 -8 z" fill="#33383f"/>
+          <rect x="176" y="544" width="48" height="18" rx="3" fill="#22262b"/>
+        </g>
+        <!-- MOTOR -->
+        <g class="part" id="p-motor">
+          <rect x="140" y="420" width="120" height="128" rx="10" fill="#2f343b"/>
+          <rect x="140" y="420" width="120" height="128" rx="10" stroke="#454c56" stroke-width="1.5"/>
+          <g stroke="#454c56" stroke-width="1.5">
+            <line x1="152" y1="440" x2="248" y2="440"/><line x1="152" y1="456" x2="248" y2="456"/>
+            <line x1="152" y1="472" x2="248" y2="472"/><line x1="152" y1="488" x2="248" y2="488"/>
+            <line x1="152" y1="504" x2="248" y2="504"/><line x1="152" y1="520" x2="248" y2="520"/>
+          </g>
+          <circle cx="200" cy="484" r="7" fill="#ff5a1f"/>
+        </g>
+        <!-- LOWER BURR -->
+        <g class="part" id="p-burr-lo">
+          <path d="M164 376 h72 l-8 30 h-56 z" fill="#8d949c"/>
+          <path d="M164 376 h72 l-3 11 h-66 z" fill="#aeb4bb"/>
+          <g stroke="#5c636c" stroke-width="1.4">
+            <line x1="176" y1="380" x2="172" y2="402"/><line x1="190" y1="380" x2="188" y2="404"/>
+            <line x1="204" y1="380" x2="204" y2="405"/><line x1="218" y1="380" x2="220" y2="403"/>
+            <line x1="230" y1="380" x2="234" y2="400"/>
+          </g>
+        </g>
+        <!-- UPPER BURR -->
+        <g class="part" id="p-burr-up">
+          <path d="M172 316 h56 l8 30 h-72 z" fill="#9aa1a9"/>
+          <path d="M175 334 h50 l4 12 h-58 z" fill="#767d86"/>
+          <circle cx="200" cy="322" r="5" fill="#454c56"/>
+        </g>
+        <!-- SHELL -->
+        <g class="part" id="p-shell">
+          <path d="M148 300 h104 a10 10 0 0 1 10 10 v244 a10 10 0 0 1 -10 10 h-104 a10 10 0 0 1 -10 -10 v-244 a10 10 0 0 1 10 -10 z"
+                fill="#1d2024" stroke="#454c56" stroke-width="1.5" opacity=".92"/>
+          <rect x="188" y="318" width="24" height="4" rx="2" fill="#454c56"/>
+          <text x="200" y="540" font-family="IBM Plex Mono, monospace" font-size="11" fill="#aeb4bb" text-anchor="middle" letter-spacing="2">GR-1</text>
+        </g>
+        <!-- DIAL -->
+        <g class="part" id="p-dial">
+          <circle cx="200" cy="272" r="30" fill="#2f343b" stroke="#454c56" stroke-width="1.5"/>
+          <circle cx="200" cy="272" r="21" fill="#22262b"/>
+          <line x1="200" y1="256" x2="200" y2="266" stroke="#ff5a1f" stroke-width="3"/>
+          <g stroke="#5c636c" stroke-width="1.2">
+            <line x1="182" y1="258" x2="186" y2="262"/><line x1="218" y1="258" x2="214" y2="262"/>
+            <line x1="176" y1="272" x2="182" y2="272"/><line x1="224" y1="272" x2="218" y2="272"/>
+          </g>
+        </g>
+        <!-- HOPPER -->
+        <g class="part" id="p-hopper">
+          <path d="M170 180 h60 l-10 56 h-40 z" fill="none" stroke="#aeb4bb" stroke-width="2"/>
+          <path d="M174 186 h52 l-8 44 h-36 z" fill="#aeb4bb" opacity=".16"/>
+        </g>
+        <!-- LID -->
+        <g class="part" id="p-lid">
+          <rect x="162" y="152" width="76" height="14" rx="7" fill="#8d949c"/>
+          <rect x="190" y="144" width="20" height="8" rx="4" fill="#5c636c"/>
+        </g>
+
+        <!-- callout lines -->
+        <g class="part" id="p-callouts" font-family="IBM Plex Mono, monospace" font-size="10" fill="#aeb4bb">
+          <line x1="238" y1="330" x2="316" y2="330" stroke="#ff5a1f" stroke-width="1"/>
+          <text x="322" y="333" fill="#ff5a1f">83 mm burr</text>
+          <line x1="262" y1="484" x2="316" y2="484" stroke="#454c56" stroke-width="1"/>
+          <text x="322" y="487">DC-motor · 240 rpm</text>
+          <line x1="230" y1="208" x2="316" y2="208" stroke="#454c56" stroke-width="1"/>
+          <text x="322" y="211">45 g hopper</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="readout">
+      <div class="step" data-step="0">
+        <span class="k">00 / CHASSIS</span>
+        <h2>Mass first</h2>
+        <p>A 2.8 kg steel base and cradle. The grinder doesn't walk, hum, or rattle —
+        vibration goes into the bench, not the burrs.</p>
+        <table><tr><td>Base plate</td><td>6 mm steel</td></tr><tr><td>Footprint</td><td>118 × 96 mm</td></tr></table>
+      </div>
+      <div class="step" data-step="1">
+        <span class="k">01 / DRIVE</span>
+        <h2>Slow by design</h2>
+        <p>A direct-drive DC motor at 240 rpm. No belts to stretch, no gears to whine.
+        Slow burrs stay cool; cool burrs don't bake the fines.</p>
+        <table><tr><td>Speed</td><td>240 rpm</td></tr><tr><td>Noise at 1 m</td><td>58 dB</td></tr></table>
+      </div>
+      <div class="step" data-step="2">
+        <span class="k">02 / BURRS</span>
+        <h2>The whole point</h2>
+        <p>83 mm conical burrs, cut and measured in Turin, shipped with their own test
+        sheet. Alignment is set at the factory and holds — there is nothing for you to
+        shim.</p>
+        <table><tr><td>Burr set</td><td>83 mm conical</td></tr><tr><td>Runout</td><td>&lt; 5 µm</td></tr></table>
+      </div>
+      <div class="step" data-step="3">
+        <span class="k">03 / SHELL &amp; DIAL</span>
+        <h2>One dial. Ninety detents.</h2>
+        <p>The shell drops over the works; the dial clicks through 90 marked steps from
+        Turkish to press. Setting 34 today is setting 34 in ten years.</p>
+        <table><tr><td>Adjustment</td><td>90 stepped detents</td></tr><tr><td>Shell</td><td>anodized aluminum</td></tr></table>
+      </div>
+      <div class="step" data-step="4">
+        <span class="k">04 / COMPLETE</span>
+        <h2>GR-1. Assembled.</h2>
+        <p>Eleven parts, four minutes with the included wrench, fully serviceable
+        forever. Every spare available individually — including the burrs your
+        grandchildren will replace.</p>
+        <table><tr><td>Parts count</td><td>11</td></tr><tr><td>Warranty</td><td>25 years, transferable</td></tr></table>
+      </div>
+    </div>
+  </div>
+  <div class="progress"><span>ASSEMBLY</span><span class="bar"><i id="pbar"></i></span><span id="ppct">000%</span></div>
+</div>
+
+<section class="specs" aria-label="Specifications">
+  <div><div class="v">83<small> mm</small></div><div class="k">Conical burrs</div></div>
+  <div><div class="v">240<small> rpm</small></div><div class="k">Burr speed</div></div>
+  <div><div class="v">0.2<small> g</small></div><div class="k">Retention</div></div>
+  <div><div class="v">25<small> yr</small></div><div class="k">Warranty</div></div>
+</section>
+
+<section class="order" id="order">
+  <h2>Batch 04 ships in October.</h2>
+  <div class="buy">
+    <p class="price">Machined to order · <b>€890</b></p>
+    <button id="reserve">Reserve yours</button>
+    <p class="note" id="order-note">140 of 200 units remaining</p>
+  </div>
+</section>
+
+<footer>
+  <span>VETTA Srl · Officina 12, Turin</span>
+  <span>service@vetta.coffee · every part, forever</span>
+</footer>
+
+<script>
+'use strict';
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // part timelines: [t0, t1, fromX, fromY, rot]
+  const TL = {
+    'p-base':     [0.00, 0.14, 0, 260, 0],
+    'p-cradle':   [0.08, 0.22, 0, -300, 0],
+    'p-motor':    [0.16, 0.34, -320, 0, -8],
+    'p-burr-lo':  [0.30, 0.46, 340, 0, 10],
+    'p-burr-up':  [0.38, 0.54, 340, -60, -10],
+    'p-shell':    [0.52, 0.72, 0, -420, 0],
+    'p-dial':     [0.62, 0.78, -300, -80, -30],
+    'p-hopper':   [0.70, 0.86, 300, -120, 14],
+    'p-lid':      [0.78, 0.92, 0, -260, 0],
+    'p-callouts': [0.90, 1.00, 0, 0, 0],
+  };
+  const STEPS = [0.0, 0.24, 0.42, 0.62, 0.88]; // step activation thresholds
+
+  const wrap = document.getElementById('assembly');
+  const parts = {};
+  for (const id in TL) parts[id] = document.getElementById(id);
+  const steps = [...document.querySelectorAll('.step')];
+  const pbar = document.getElementById('pbar');
+  const ppct = document.getElementById('ppct');
+
+  const ease = (p) => 1 - Math.pow(1 - p, 3);
+  const clamp = (v) => Math.max(0, Math.min(1, v));
+
+  let ticking = false;
+  function paint() {
+    ticking = false;
+    const r = wrap.getBoundingClientRect();
+    const total = r.height - innerHeight;
+    const p = clamp(-r.top / total);
+
+    for (const id in TL) {
+      const [t0, t1, fx, fy, rot] = TL[id];
+      const lp = ease(clamp((p - t0) / (t1 - t0)));
+      const el = parts[id];
+      el.style.opacity = id === 'p-callouts' ? lp : (0.15 + 0.85 * lp);
+      el.style.transform =
+        `translate(${fx * (1 - lp)}px, ${fy * (1 - lp)}px) rotate(${rot * (1 - lp)}deg)`;
+    }
+
+    let active = 0;
+    for (let i = 0; i < STEPS.length; i++) if (p >= STEPS[i]) active = i;
+    steps.forEach((s, i) => s.classList.toggle('on', i === active));
+
+    pbar.style.width = (p * 100) + '%';
+    ppct.textContent = String(Math.round(p * 100)).padStart(3, '0') + '%';
+  }
+  function onScroll() {
+    if (!ticking) { ticking = true; requestAnimationFrame(paint); }
+  }
+  if (!reduce) {
+    addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('resize', onScroll, { passive: true });
+    paint();
+  } else {
+    steps.forEach((s) => s.classList.add('on'));
+  }
+
+  // reserve micro-interaction
+  let left = 140;
+  document.getElementById('reserve').addEventListener('click', (e) => {
+    left--;
+    e.target.textContent = 'Reserved ✓';
+    e.target.style.background = '#3ecf8e';
+    document.getElementById('order-note').textContent =
+      left + ' of 200 units remaining — confirmation sent';
+    setTimeout(() => {
+      e.target.textContent = 'Reserve yours';
+      e.target.style.background = '';
+    }, 2600);
+  });
+})();
+</script>
+</body>
+</html>

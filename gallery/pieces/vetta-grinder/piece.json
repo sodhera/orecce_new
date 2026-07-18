@@ -1,0 +1,21 @@
+{
+  "title": "Vetta GR-1 — precision grinder",
+  "prompt": "A product page for a machined, buy-it-for-life single-dose coffee grinder. Industrial, honest, anti-subscription. Show me how it's built.",
+  "direction": {
+    "name": "Assembly line",
+    "thesis": "A dark workshop-manual product page where the grinder assembles itself part by part as you scroll — engineering as the sales pitch, safety-orange callouts as the only decoration.",
+    "signature": "Scroll-driven exploded-view assembly: eleven SVG parts fly in along mechanical axes, bidirectionally scrubbed by scroll, with stage-synced spec captions."
+  },
+  "dna": {
+    "archetype": "commerce",
+    "palette": { "value": "dark", "temperature": "cool", "accent_hue": 22, "saturation": "vivid" },
+    "type_voice": "grotesk",
+    "layout": "full-bleed-scenes",
+    "density": "medium",
+    "motion": "scroll-driven",
+    "shape": "geometric",
+    "texture": "line-work"
+  },
+  "created": "2026-07-18T12:10:00Z",
+  "generatedBy": "hand-directed flagship · scroll-assembly pattern"
+}

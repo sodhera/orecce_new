@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#15100c">
+  <meta name="description" content="Gumba is an intimate basement jazz room in Lazimpat, Kathmandu. See this week's late-night lineup and request a table.">
+  <title>Gumba — Basement Jazz, Kathmandu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --night: #15100c;
+      --deep: #1c140e;
+      --wine: #2b1812;
+      --paper: #e9dfc9;
+      --muted: #b9aa8e;
+      --amber: #d5a13a;
+      --line: rgba(233, 223, 201, .23);
+      --serif: "Bodoni Moda", Didot, "Times New Roman", serif;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--night); }
+    body {
+      margin: 0;
+      color: var(--paper);
+      background: var(--night);
+      font-family: var(--serif);
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      pointer-events: none;
+      opacity: .11;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.48'/%3E%3C/svg%3E");
+      mix-blend-mode: soft-light;
+    }
+    a, button, input, select, textarea { font: inherit; }
+    a { color: inherit; }
+    :focus-visible {
+      outline: 2px solid var(--amber);
+      outline-offset: 5px;
+    }
+    .skip {
+      position: fixed;
+      z-index: 100;
+      top: 12px;
+      left: 12px;
+      padding: 10px 14px;
+      background: var(--paper);
+      color: var(--night);
+      transform: translateY(-150%);
+    }
+    .skip:focus { transform: translateY(0); }
+
+    .nav {
+      position: absolute;
+      z-index: 10;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 25px clamp(20px, 4vw, 64px);
+      border-bottom: 1px solid rgba(233, 223, 201, .16);
+    }
+    .wordmark {
+      font-size: clamp(27px, 2.7vw, 42px);
+      font-weight: 500;
+      letter-spacing: -.07em;
+      text-decoration: none;
+      line-height: 1;
+    }
+    .nav-note, .nav-link, .eyebrow, .meta, .day, .detail, label, input, select, textarea, .button, .footnote {
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-size: 11px;
+    }
+    .nav-note { color: var(--muted); text-align: center; }
+    .nav-link { justify-self: end; text-underline-offset: 6px; }
+
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: grid;
+      align-items: end;
+      isolation: isolate;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(12,8,5,.15), rgba(12,8,5,.25) 45%, #15100c 100%),
+        radial-gradient(ellipse at 62% 51%, rgba(204,132,28,.20), transparent 15%),
+        radial-gradient(ellipse at 50% 100%, #4e2515 0, #21150e 36%, #120e0b 78%);
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      z-index: -2;
+      left: 50%;
+      bottom: -12vh;
+      width: min(84vw, 1050px);
+      height: 60vh;
+      transform: translateX(-50%);
+      border-radius: 50% 50% 0 0;
+      background:
+        linear-gradient(90deg, transparent 48.5%, rgba(233,223,201,.12) 49%, rgba(233,223,201,.12) 51%, transparent 51.5%),
+        repeating-linear-gradient(90deg, transparent 0 12%, rgba(12,8,5,.4) 12.3% 12.8%),
+        linear-gradient(180deg, #2a1911, #0c0907 73%);
+      box-shadow: inset 0 25px 70px rgba(213,161,58,.08), 0 -25px 120px rgba(213,161,58,.08);
+      opacity: .88;
+    }
+    .stage-light {
+      position: absolute;
+      z-index: -1;
+      top: 3%;
+      left: 50%;
+      width: min(76vw, 900px);
+      height: 88%;
+      transform: translateX(-50%);
+      clip-path: polygon(42% 0, 58% 0, 84% 100%, 16% 100%);
+      background: linear-gradient(180deg, rgba(231,183,90,.15), rgba(213,161,58,.035) 70%, transparent);
+      filter: blur(15px);
+      animation: breathe 9s ease-in-out infinite;
+    }
+    @keyframes breathe {
+      0%, 100% { opacity: .42; transform: translateX(-50%) scaleX(.96); }
+      50% { opacity: .78; transform: translateX(-50%) scaleX(1.04); }
+    }
+    #smoke {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: .55;
+      pointer-events: none;
+    }
+    .hero-copy {
+      width: 100%;
+      padding: 130px clamp(20px, 5vw, 76px) clamp(34px, 6vw, 78px);
+    }
+    .hero-kicker {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 0 0 15px;
+      color: var(--amber);
+    }
+    .hero-kicker::before { content: ""; width: 36px; height: 1px; background: currentColor; }
+    h1 {
+      max-width: 1050px;
+      margin: 0;
+      font-size: clamp(64px, 11.5vw, 174px);
+      font-weight: 400;
+      letter-spacing: -.075em;
+      line-height: .78;
+    }
+    h1 em { color: var(--amber); font-weight: 400; }
+    .hero-bottom {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(220px, .55fr);
+      gap: 10vw;
+      align-items: end;
+      margin-top: clamp(35px, 8vh, 84px);
+    }
+    .intro {
+      max-width: 610px;
+      margin: 0;
+      font-size: clamp(20px, 2.15vw, 31px);
+      line-height: 1.35;
+    }
+    .tonight { border-left: 1px solid var(--amber); padding-left: 18px; }
+    .tonight strong { display: block; margin-top: 8px; font-size: 17px; font-weight: 400; }
+
+    .scene { position: relative; padding: clamp(88px, 12vw, 176px) clamp(20px, 7vw, 105px); }
+    .lineup { background: var(--paper); color: var(--night); }
+    .section-head {
+      display: grid;
+      grid-template-columns: .55fr 1.45fr;
+      gap: 8vw;
+      align-items: start;
+      margin-bottom: clamp(58px, 9vw, 115px);
+    }
+    .section-head h2 {
+      margin: -.1em 0 0;
+      max-width: 780px;
+      font-size: clamp(48px, 7.3vw, 112px);
+      font-weight: 400;
+      line-height: .88;
+      letter-spacing: -.06em;
+    }
+    .eyebrow { color: #755f3e; }
+    .shows { border-top: 1px solid rgba(21,16,12,.35); }
+    .show {
+      display: grid;
+      grid-template-columns: 120px minmax(0, 1.2fr) minmax(180px, .65fr);
+      gap: 34px;
+      align-items: center;
+      padding: 29px 0 33px;
+      border-bottom: 1px solid rgba(21,16,12,.25);
+      transition: padding .25s ease, background .25s ease;
+    }
+    .show:hover { padding-left: 12px; background: rgba(117,95,62,.055); }
+    .date { display: flex; align-items: baseline; gap: 9px; }
+    .date b { font-size: 48px; font-weight: 400; line-height: 1; }
+    .show h3 { margin: 0 0 5px; font-size: clamp(25px, 3vw, 43px); font-weight: 400; line-height: 1; }
+    .detail { color: #66583f; line-height: 1.6; }
+    .set { justify-self: end; text-align: right; }
+
+    .room {
+      min-height: 92svh;
+      display: grid;
+      grid-template-columns: 1.12fr .88fr;
+      align-items: stretch;
+      padding: 0;
+      background: #1b120d;
+    }
+    .room-art {
+      position: relative;
+      min-height: 680px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 43% 29%, rgba(230,177,73,.5) 0 1.5%, transparent 2%),
+        radial-gradient(ellipse at 43% 38%, rgba(198,124,38,.28), transparent 18%),
+        linear-gradient(150deg, transparent 0 22%, rgba(233,223,201,.04) 22.3% 23%, transparent 23.3%),
+        linear-gradient(15deg, #110c09 9%, #3a1d13 46%, #100c09 100%);
+    }
+    .room-art::before {
+      content: "";
+      position: absolute;
+      width: 43%;
+      height: 42%;
+      left: 24%;
+      top: 25%;
+      border: 1px solid rgba(233,223,201,.16);
+      border-radius: 48% 52% 6% 8%;
+      box-shadow: 0 90px 80px rgba(0,0,0,.55);
+      background:
+        radial-gradient(ellipse at 50% 87%, #9b672e 0 4%, transparent 4.5%),
+        linear-gradient(90deg, transparent 48%, rgba(233,223,201,.2) 49% 51%, transparent 52%),
+        radial-gradient(ellipse at 50% 100%, #26130d 0 38%, transparent 39%);
+    }
+    .room-art::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(90deg, transparent 0 14%, rgba(0,0,0,.18) 14.2% 14.7%);
+      mix-blend-mode: multiply;
+    }
+    .room-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: clamp(64px, 9vw, 135px) clamp(28px, 7vw, 105px);
+    }
+    .room-copy h2 {
+      margin: 22px 0 35px;
+      font-size: clamp(51px, 6.5vw, 98px);
+      font-weight: 400;
+      line-height: .9;
+      letter-spacing: -.06em;
+    }
+    .room-copy p { max-width: 470px; margin: 0 0 24px; font-size: 20px; line-height: 1.55; color: #d4c6aa; }
+    .house-rules { margin-top: 40px; padding-top: 22px; border-top: 1px solid var(--line); color: var(--muted); line-height: 1.8; }
+
+    .reserve {
+      color: var(--night);
+      background: var(--amber);
+      padding-top: clamp(80px, 11vw, 155px);
+      padding-bottom: clamp(80px, 11vw, 155px);
+    }
+    .reserve-wrap { display: grid; grid-template-columns: .85fr 1.15fr; gap: clamp(55px, 10vw, 150px); }
+    .reserve h2 {
+      margin: 18px 0 28px;
+      font-size: clamp(57px, 7.7vw, 116px);
+      font-weight: 400;
+      line-height: .83;
+      letter-spacing: -.065em;
+    }
+    .reserve-copy p { max-width: 390px; font-size: 19px; line-height: 1.55; }
+    form { display: grid; grid-template-columns: 1fr 1fr; gap: 27px 24px; align-content: start; }
+    .field { display: grid; gap: 9px; }
+    .field.full { grid-column: 1 / -1; }
+    label { font-weight: 500; }
+    input, select, textarea {
+      width: 100%;
+      min-height: 50px;
+      padding: 10px 0;
+      color: var(--night);
+      border: 0;
+      border-bottom: 1px solid rgba(21,16,12,.62);
+      border-radius: 0;
+      background: transparent;
+      text-transform: none;
+      letter-spacing: .02em;
+      font-size: 14px;
+    }
+    textarea { min-height: 78px; resize: vertical; }
+    input::placeholder, textarea::placeholder { color: rgba(21,16,12,.6); }
+    input:focus, select:focus, textarea:focus { outline: 0; border-bottom-width: 2px; }
+    .button {
+      grid-column: 1 / -1;
+      min-height: 56px;
+      margin-top: 8px;
+      padding: 16px 22px;
+      color: var(--paper);
+      border: 1px solid var(--night);
+      background: var(--night);
+      cursor: pointer;
+      transition: transform .18s ease, color .18s ease, background .18s ease;
+    }
+    .button:hover { color: var(--night); background: transparent; }
+    .button:active { transform: scale(.98); }
+    .form-status {
+      grid-column: 1 / -1;
+      min-height: 1.4em;
+      margin: -9px 0 0;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    footer {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 30px;
+      padding: 48px clamp(20px, 5vw, 76px);
+      background: var(--night);
+      color: var(--muted);
+      align-items: end;
+    }
+    footer .wordmark { color: var(--paper); }
+    .address { line-height: 1.75; }
+    .footer-links { justify-self: end; text-align: right; line-height: 2; }
+    .footer-links a { text-underline-offset: 5px; }
+
+    @media (max-width: 760px) {
+      .nav { grid-template-columns: 1fr auto; }
+      .nav-note { display: none; }
+      .hero-copy { padding-top: 115px; }
+      h1 { font-size: clamp(66px, 23vw, 104px); line-height: .82; }
+      .hero-bottom, .section-head, .reserve-wrap { grid-template-columns: 1fr; }
+      .hero-bottom { gap: 35px; }
+      .tonight { max-width: 280px; }
+      .section-head { gap: 24px; }
+      .show { grid-template-columns: 82px 1fr; gap: 17px; }
+      .show .set { grid-column: 2; justify-self: start; text-align: left; }
+      .date b { font-size: 39px; }
+      .room { grid-template-columns: 1fr; }
+      .room-art { min-height: 65svh; }
+      .room-copy { min-height: 70svh; }
+      form { grid-template-columns: 1fr; }
+      .field.full, .button, .form-status { grid-column: 1; }
+      footer { grid-template-columns: 1fr; }
+      .footer-links { justify-self: start; text-align: left; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      #smoke { display: none; }
+      .stage-light { opacity: .58; animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to lineup</a>
+  <header class="nav" aria-label="Primary navigation">
+    <a class="wordmark" href="#top" aria-label="Gumba home">Gumba</a>
+    <span class="nav-note">Basement jazz · Lazimpat · Kathmandu</span>
+    <a class="nav-link" href="#table">Get a table</a>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="stage-light" aria-hidden="true"></div>
+      <canvas id="smoke" aria-hidden="true"></canvas>
+      <div class="hero-copy">
+        <p class="hero-kicker eyebrow">Downstairs after dark</p>
+        <h1 id="hero-title">The city fades.<br><em>The room listens.</em></h1>
+        <div class="hero-bottom">
+          <p class="intro">A low-ceilinged room for live jazz, long sets and close listening. No stage tricks. Just players, fifty seats, and the hour getting late.</p>
+          <div class="tonight">
+            <span class="meta">Tonight · doors 8:30</span>
+            <strong>Jam Below<br>First set at 9:30</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene lineup" id="lineup" aria-labelledby="lineup-title">
+      <div class="section-head">
+        <p class="eyebrow">This week below street level</p>
+        <h2 id="lineup-title">Four nights.<br>No two alike.</h2>
+      </div>
+      <div class="shows">
+        <article class="show">
+          <div class="date"><b>22</b><span class="day">Wed<br>Jul</span></div>
+          <div><h3>Jam Below</h3><span class="detail">House rhythm section · guests welcome</span></div>
+          <span class="detail set">Doors 9:00<br>Music from 9:30</span>
+        </article>
+        <article class="show">
+          <div class="date"><b>23</b><span class="day">Thu<br>Jul</span></div>
+          <div><h3>Prasanna Shakya Quartet</h3><span class="detail">Tenor saxophone · late bop</span></div>
+          <span class="detail set">Doors 8:30<br>Sets 9:15 &amp; 10:45</span>
+        </article>
+        <article class="show">
+          <div class="date"><b>24</b><span class="day">Fri<br>Jul</span></div>
+          <div><h3>Sushil Bishwa Trio</h3><span class="detail">Guitar · upright bass · drums</span></div>
+          <span class="detail set">Doors 8:30<br>Sets 9:15 &amp; 10:45</span>
+        </article>
+        <article class="show">
+          <div class="date"><b>25</b><span class="day">Sat<br>Jul</span></div>
+          <div><h3>Abhisek Mishra &amp; Friends</h3><span class="detail">Keys · bass · drums · soul standards</span></div>
+          <span class="detail set">Doors 8:30<br>Sets 9:15 &amp; 10:45</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="room" id="room" aria-labelledby="room-title">
+      <div class="room-art" role="img" aria-label="An abstracted view of Gumba's low-lit basement stage"></div>
+      <div class="room-copy">
+        <span class="eyebrow">The room</span>
+        <h2 id="room-title">Close enough to hear the breath.</h2>
+        <p>Gumba sits one flight below Lazimpat. The room holds fifty, and the back row is still only a few steps from the band.</p>
+        <p>Arrive early for a table. Come late and we will find you a stool, a wall, or the last bit of bar.</p>
+        <div class="house-rules detail">Listening room during sets<br>Kitchen until 11:30 pm<br>18+ after 9 pm · smoking outside</div>
+      </div>
+    </section>
+
+    <section class="scene reserve" id="table" aria-labelledby="table-title">
+      <div class="reserve-wrap">
+        <div class="reserve-copy">
+          <span class="eyebrow">A place for the night</span>
+          <h2 id="table-title">Get a table.</h2>
+          <p>Tables are held for twenty minutes after your requested arrival. We confirm each request by phone; a request is not a booking until you hear from us.</p>
+        </div>
+        <form id="booking-form">
+          <div class="field">
+            <label for="name">Your name</label>
+            <input id="name" name="name" autocomplete="name" required placeholder="Name">
+          </div>
+          <div class="field">
+            <label for="phone">Phone</label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" required placeholder="+977">
+          </div>
+          <div class="field">
+            <label for="night">Night</label>
+            <select id="night" name="night" required>
+              <option value="">Choose a set</option>
+              <option>Wednesday 22 July — Jam Below</option>
+              <option>Thursday 23 July — Prasanna Shakya Quartet</option>
+              <option>Friday 24 July — Sushil Bishwa Trio</option>
+              <option>Saturday 25 July — Abhisek Mishra &amp; Friends</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="party">People</label>
+            <select id="party" name="party" required>
+              <option value="">Party size</option>
+              <option>2 people</option><option>3 people</option><option>4 people</option><option>5 people</option><option>6 people</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="note">Anything we should know?</label>
+            <textarea id="note" name="note" placeholder="Accessibility needs, a birthday, or a preferred set"></textarea>
+          </div>
+          <button class="button" type="submit">Request the table</button>
+          <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <a class="wordmark" href="#top">Gumba</a>
+    <div class="address footnote">One flight down, Lazimpat Road<br>Kathmandu 44600 · Wed–Sat, 8:30 till late</div>
+    <div class="footer-links footnote"><a href="#table">Request a table</a><br><a href="#lineup">This week’s music</a></div>
+  </footer>
+
+  <script>
+    (() => {
+      const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const canvas = document.querySelector("#smoke");
+      const ctx = canvas.getContext("2d");
+      let motes = [], frame = 0, visible = true;
+
+      function size() {
+        const dpr = Math.min(devicePixelRatio || 1, 2);
+        canvas.width = innerWidth * dpr;
+        canvas.height = innerHeight * dpr;
+        canvas.style.width = innerWidth + "px";
+        canvas.style.height = innerHeight + "px";
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        motes = Array.from({length: Math.min(70, Math.floor(innerWidth / 14))}, () => ({
+          x: Math.random() * innerWidth,
+          y: Math.random() * innerHeight,
+          r: 35 + Math.random() * 90,
+          dx: -.05 + Math.random() * .1,
+          dy: -.07 - Math.random() * .09,
+          a: .006 + Math.random() * .016,
+          phase: Math.random() * Math.PI * 2
+        }));
+      }
+      function draw() {
+        if (!visible || reduced) return;
+        frame++;
+        ctx.clearRect(0, 0, innerWidth, innerHeight);
+        motes.forEach((m, i) => {
+          m.x += m.dx + Math.sin(frame * .002 + m.phase) * .035;
+          m.y += m.dy;
+          if (m.y < -m.r) { m.y = innerHeight + m.r; m.x = Math.random() * innerWidth; }
+          const g = ctx.createRadialGradient(m.x, m.y, 0, m.x, m.y, m.r);
+          g.addColorStop(0, `rgba(225,210,180,${m.a})`);
+          g.addColorStop(1, "rgba(225,210,180,0)");
+          ctx.fillStyle = g;
+          ctx.beginPath();
+          ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        requestAnimationFrame(draw);
+      }
+      if (!reduced) {
+        size();
+        addEventListener("resize", size, {passive: true});
+        document.addEventListener("visibilitychange", () => {
+          visible = !document.hidden;
+          if (visible) requestAnimationFrame(draw);
+        });
+        requestAnimationFrame(draw);
+      }
+
+      const form = document.querySelector("#booking-form");
+      form.addEventListener("submit", event => {
+        event.preventDefault();
+        const name = document.querySelector("#name").value.trim().split(" ")[0];
+        document.querySelector("#form-status").textContent =
+          `Thank you${name ? ", " + name : ""}. Your request has been noted; the room will contact you to confirm.`;
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GREBE — a type foundry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bone: #f4f2ed;
+  --black: #111008;
+  --grey: #8b877c;
+  --red: #d92b1c;
+  --disp: "Fraunces", Georgia, serif;
+  --ui: "Inter", -apple-system, sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bone);
+  color: var(--black);
+  font-family: var(--ui);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+/* custom cursor (fine pointers only) */
+@media (pointer: fine) {
+  .cur-dot, .cur-ring { position: fixed; top: 0; left: 0; border-radius: 50%; pointer-events: none; z-index: 60; }
+  .cur-dot { width: 6px; height: 6px; background: var(--red); transform: translate(-50%,-50%); }
+  .cur-ring {
+    width: 34px; height: 34px; border: 1px solid rgba(17,16,8,.4);
+    transform: translate(-50%,-50%);
+    transition: width .18s, height .18s, border-color .18s;
+  }
+  body.cur-hot .cur-ring { width: 56px; height: 56px; border-color: var(--red); }
+}
+@media (pointer: coarse) { .cur-dot, .cur-ring { display: none; } }
+
+/* bar */
+.bar {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 20px clamp(18px, 4vw, 52px);
+  border-bottom: 1px solid var(--black);
+}
+.bar .mark { font-family: var(--disp); font-weight: 600; font-size: 19px; font-variation-settings: "opsz" 40; }
+.bar nav { display: flex; gap: 26px; font-size: 12.5px; letter-spacing: .04em; }
+.bar nav a { border-bottom: 1px solid transparent; }
+.bar nav a:hover { border-color: var(--black); }
+
+/* hero specimen */
+.hero {
+  padding: clamp(28px, 5vh, 60px) clamp(12px, 2.5vw, 40px) 20px;
+  border-bottom: 1px solid var(--black);
+  text-align: center;
+  overflow: hidden;
+}
+.hero .eyebrow { font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: var(--grey); }
+#specimen {
+  font-family: var(--disp);
+  font-size: clamp(64px, 16.5vw, 240px);
+  line-height: .96;
+  letter-spacing: -0.02em;
+  user-select: none;
+  margin: 12px 0 4px;
+}
+#specimen .L {
+  display: inline-block;
+  font-variation-settings: "wght" 340, "opsz" 144;
+  will-change: font-variation-settings;
+}
+.hero .hint { font-size: 11.5px; color: var(--grey); }
+.hero .hint em { color: var(--red); font-style: normal; }
+
+/* faces list */
+.faces { border-bottom: 1px solid var(--black); }
+.face {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 18px;
+  padding: 26px clamp(18px, 4vw, 52px);
+  border-top: 1px solid var(--black);
+  transition: background .18s;
+  position: relative;
+}
+.face:first-child { border-top: none; }
+.face:hover { background: #eceade; }
+.face .name {
+  font-family: var(--disp);
+  font-size: clamp(30px, 5.4vw, 62px);
+  line-height: 1.05;
+  transition: transform .3s cubic-bezier(.2,.8,.3,1);
+}
+.face:hover .name { transform: translateX(14px); }
+.face:nth-child(1) .name { font-variation-settings: "wght" 640, "opsz" 144; }
+.face:nth-child(2) .name { font-variation-settings: "wght" 240, "opsz" 144; font-style: italic; }
+.face:nth-child(3) .name { font-variation-settings: "wght" 880, "opsz" 20; }
+.face .meta { text-align: right; font-size: 12px; color: var(--grey); }
+.face .meta b { display: block; color: var(--black); font-weight: 500; font-size: 13px; }
+.face .arrow {
+  position: absolute; right: clamp(18px, 4vw, 52px); bottom: 12px;
+  font-family: var(--disp); font-size: 20px; color: var(--red);
+  opacity: 0; transform: translateX(-8px);
+  transition: opacity .2s, transform .2s;
+}
+.face:hover .arrow { opacity: 1; transform: none; }
+
+/* playground */
+.play {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 250px;
+  gap: clamp(20px, 4vw, 56px);
+  padding: clamp(36px, 6vw, 72px) clamp(18px, 4vw, 52px);
+  border-bottom: 1px solid var(--black);
+  align-items: center;
+}
+#play-out {
+  font-family: var(--disp);
+  font-size: clamp(38px, 7.5vw, 96px);
+  line-height: 1.02;
+  overflow-wrap: anywhere;
+  font-variation-settings: "wght" 500, "opsz" 90;
+}
+.controls .lbl {
+  display: flex; justify-content: space-between;
+  font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--grey);
+  margin: 22px 0 8px;
+}
+.controls .lbl output { color: var(--black); font-variant-numeric: tabular-nums; }
+input[type="range"] {
+  width: 100%; appearance: none; height: 1px; background: var(--black); outline-offset: 6px;
+}
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none; width: 16px; height: 16px; border-radius: 50%;
+  background: var(--bone); border: 1.5px solid var(--black); cursor: pointer;
+  transition: transform .15s;
+}
+input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.25); background: var(--red); border-color: var(--red); }
+input[type="range"]::-moz-range-thumb {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--bone); border: 1.5px solid var(--black); cursor: pointer;
+}
+.controls input[type="text"] {
+  width: 100%; margin-top: 26px;
+  font: 13px var(--ui); color: var(--black);
+  background: none; border: none; border-bottom: 1px solid var(--black);
+  padding: 8px 2px;
+}
+.controls input[type="text"]:focus { outline: none; border-bottom-color: var(--red); }
+
+/* license band */
+.license {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 24px; flex-wrap: wrap;
+  padding: clamp(44px, 7vw, 90px) clamp(18px, 4vw, 52px);
+}
+.license h2 {
+  font-family: var(--disp); font-weight: 400; font-style: italic;
+  font-size: clamp(26px, 4vw, 44px);
+  font-variation-settings: "opsz" 144;
+  max-width: 22ch; line-height: 1.15;
+}
+.magnet {
+  display: inline-block;
+  font-size: 13px; letter-spacing: .1em; text-transform: uppercase;
+  border: 1.5px solid var(--black); border-radius: 999px;
+  padding: 18px 34px;
+  will-change: transform;
+  transition: background .2s, color .2s;
+}
+.magnet:hover { background: var(--black); color: var(--bone); }
+
+footer {
+  border-top: 1px solid var(--black);
+  padding: 18px clamp(18px, 4vw, 52px);
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  font-size: 11.5px; color: var(--grey);
+}
+footer b { color: var(--red); font-weight: 500; }
+
+@media (max-width: 760px) {
+  .play { grid-template-columns: 1fr; }
+  .bar nav { display: none; }
+  .face .meta { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition-duration: .01ms !important; }
+  .cur-dot, .cur-ring { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="cur-dot" aria-hidden="true"></div>
+<div class="cur-ring" aria-hidden="true"></div>
+
+<header class="bar">
+  <span class="mark">Grebe¹</span>
+  <nav aria-label="Main">
+    <a href="#faces">Faces</a>
+    <a href="#play">Try</a>
+    <a href="#license">Licensing</a>
+  </nav>
+  <span style="font-size:12px;color:var(--grey)">Est. Wellington, 2019</span>
+</header>
+
+<section class="hero">
+  <p class="eyebrow">An independent type foundry · three families, drawn slowly</p>
+  <h1 id="specimen" aria-label="Grebe">Grebe</h1>
+  <p class="hint">Move your cursor through the letters — they answer. <em>Every face here is variable.</em></p>
+</section>
+
+<section class="faces" id="faces" aria-label="Typefaces">
+  <a class="face" href="#play">
+    <span class="name">Grebe Serif</span>
+    <span class="meta"><b>2019 · 2 axes</b>text &amp; display · 100–900</span>
+    <span class="arrow">→ specimen</span>
+  </a>
+  <a class="face" href="#play">
+    <span class="name">Grebe Italic</span>
+    <span class="meta"><b>2021 · 2 axes</b>a true cursive, not a slant</span>
+    <span class="arrow">→ specimen</span>
+  </a>
+  <a class="face" href="#play">
+    <span class="name">Grebe Poster</span>
+    <span class="meta"><b>2024 · 2 axes</b>tight apertures, loud sizes</span>
+    <span class="arrow">→ specimen</span>
+  </a>
+</section>
+
+<section class="play" id="play" aria-label="Type playground">
+  <p id="play-out" contenteditable="false">Whales weigh nothing underwater.</p>
+  <div class="controls">
+    <div class="lbl"><label for="wght">Weight</label><output id="wght-out">500</output></div>
+    <input type="range" id="wght" min="100" max="900" value="500" step="10">
+    <div class="lbl"><label for="opsz">Optical size</label><output id="opsz-out">90</output></div>
+    <input type="range" id="opsz" min="9" max="144" value="90" step="1">
+    <input type="text" id="play-text" value="Whales weigh nothing underwater." aria-label="Preview text" maxlength="60">
+  </div>
+</section>
+
+<section class="license" id="license">
+  <h2>Buy once, use forever. Webfonts, apps, print — one license, no per-pageview meter.</h2>
+  <a class="magnet" id="magnet" href="#license">Get the license — $120</a>
+</section>
+
+<footer>
+  <span>Grebe Type Co. · Te Aro, Wellington</span>
+  <span>specimens printed on <b>riso</b>, shipped flat</span>
+</footer>
+
+<script>
+'use strict';
+(() => {
+  const fine = matchMedia('(pointer: fine)').matches;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // split specimen into letters
+  const spec = document.getElementById('specimen');
+  const word = spec.textContent;
+  spec.textContent = '';
+  const letters = [...word].map((ch) => {
+    const s = document.createElement('span');
+    s.className = 'L';
+    s.textContent = ch;
+    spec.appendChild(s);
+    return s;
+  });
+
+  let mx = innerWidth / 2, my = -400;
+  let rx = mx, ry = my, ringX = mx, ringY = my;
+  const dot = document.querySelector('.cur-dot');
+  const ring = document.querySelector('.cur-ring');
+
+  if (fine && !reduce) {
+    addEventListener('pointermove', (e) => { mx = e.clientX; my = e.clientY; }, { passive: true });
+
+    // hot-cursor targets
+    document.querySelectorAll('a, button, input, [contenteditable]').forEach((el) => {
+      el.addEventListener('pointerenter', () => document.body.classList.add('cur-hot'));
+      el.addEventListener('pointerleave', () => document.body.classList.remove('cur-hot'));
+    });
+
+    // magnetic button
+    const mag = document.getElementById('magnet');
+    let magT = { x: 0, y: 0 };
+    mag.addEventListener('pointermove', (e) => {
+      const r = mag.getBoundingClientRect();
+      magT.x = (e.clientX - (r.left + r.width / 2)) * 0.28;
+      magT.y = (e.clientY - (r.top + r.height / 2)) * 0.38;
+    });
+    mag.addEventListener('pointerleave', () => { magT.x = 0; magT.y = 0; });
+
+    let magX = 0, magY = 0;
+    const R = 260; // proximity radius for letters
+
+    (function loop() {
+      // cursor
+      rx += (mx - rx) * 0.55; ry += (my - ry) * 0.55;
+      ringX += (mx - ringX) * 0.16; ringY += (my - ringY) * 0.16;
+      dot.style.transform = `translate(${rx}px, ${ry}px) translate(-50%,-50%)`;
+      ring.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%,-50%)`;
+
+      // proximity weight
+      for (const L of letters) {
+        const r = L.getBoundingClientRect();
+        const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+        const d = Math.hypot(mx - cx, my - cy);
+        const t = Math.max(0, 1 - d / R);
+        const w = 340 + t * t * 560;             // 340 → 900
+        const style = `"wght" ${w.toFixed(0)}, "opsz" 144`;
+        if (L._v !== style) { L.style.fontVariationSettings = style; L._v = style; }
+      }
+
+      // magnet spring
+      magX += (magT.x - magX) * 0.18; magY += (magT.y - magY) * 0.18;
+      mag.style.transform = `translate(${magX}px, ${magY}px)`;
+
+      requestAnimationFrame(loop);
+    })();
+  }
+
+  // playground
+  const out = document.getElementById('play-out');
+  const wght = document.getElementById('wght');
+  const opsz = document.getElementById('opsz');
+  const apply = () => {
+    out.style.fontVariationSettings = `"wght" ${wght.value}, "opsz" ${opsz.value}`;
+    document.getElementById('wght-out').textContent = wght.value;
+    document.getElementById('opsz-out').textContent = opsz.value;
+  };
+  wght.addEventListener('input', apply);
+  opsz.addEventListener('input', apply);
+  document.getElementById('play-text').addEventListener('input', (e) => {
+    out.textContent = e.target.value || 'Whales weigh nothing underwater.';
+  });
+})();
+</script>
+</body>
+</html>

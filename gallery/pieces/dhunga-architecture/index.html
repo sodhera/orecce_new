@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Dhunga is a two-person architecture studio in Patan, Nepal, working in brick, stone, and light.">
+  <title>Dhunga — Architecture in Brick, Stone & Light</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,300..700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper:#eceae4; --paper-2:#e2dfd7; --ink:#171714; --muted:#625f58;
+      --line:#aaa69c; --brick:#88493c; --unit:8px; --pad:clamp(20px,3.2vw,52px);
+      --ease:cubic-bezier(.22,.75,.25,1);
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; background:var(--paper); }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:"Archivo","Helvetica Neue",sans-serif; overflow-x:hidden; }
+    a { color:inherit; text-decoration:none; }
+    button { font:inherit; color:inherit; }
+    a:focus-visible, button:focus-visible { outline:2px solid var(--brick); outline-offset:5px; }
+    .skip { position:fixed; z-index:100; left:16px; top:12px; padding:10px 14px; background:var(--ink); color:var(--paper); transform:translateY(-150%); transition:transform .2s; }
+    .skip:focus { transform:none; }
+    .topbar {
+      position:fixed; z-index:30; inset:0 0 auto; height:76px; display:grid;
+      grid-template-columns:1fr auto 1fr; align-items:center; padding:0 var(--pad);
+      mix-blend-mode:difference; color:#fff;
+    }
+    .wordmark { font-size:17px; font-weight:650; letter-spacing:-.04em; }
+    .topbar .place { font-size:10px; letter-spacing:.16em; text-transform:uppercase; }
+    .menu {
+      justify-self:end; display:inline-grid; grid-template-columns:auto 22px; gap:12px;
+      align-items:center; border:0; padding:12px 0; background:none; cursor:pointer;
+      font-size:10px; letter-spacing:.16em; text-transform:uppercase;
+    }
+    .menu-lines, .menu-lines::after { display:block; width:22px; height:1px; background:currentColor; content:""; transition:transform .25s var(--ease); }
+    .menu-lines::after { transform:translateY(5px); }
+    .menu[aria-expanded="true"] .menu-lines { transform:rotate(45deg); }
+    .menu[aria-expanded="true"] .menu-lines::after { transform:rotate(-90deg); }
+    .drawer {
+      position:fixed; z-index:20; inset:0; background:var(--ink); color:var(--paper);
+      display:grid; align-content:end; padding:110px var(--pad) var(--pad);
+      clip-path:inset(0 0 100% 0); visibility:hidden; transition:clip-path .45s var(--ease),visibility 0s .45s;
+    }
+    .drawer.open { clip-path:inset(0); visibility:visible; transition:clip-path .45s var(--ease); }
+    .drawer nav { border-top:1px solid #55534e; }
+    .drawer a {
+      display:grid; grid-template-columns:64px 1fr auto; align-items:baseline;
+      border-bottom:1px solid #55534e; padding:18px 0; font-size:clamp(30px,6vw,80px); letter-spacing:-.055em;
+    }
+    .drawer a span { font-size:10px; letter-spacing:.15em; }
+    .drawer a em { font-size:11px; font-style:normal; letter-spacing:.08em; }
+    .hero {
+      min-height:100svh; padding:116px var(--pad) 28px; display:grid;
+      grid-template-columns:repeat(12,1fr); grid-template-rows:auto 1fr auto; gap:0 20px;
+      position:relative; border-bottom:1px solid var(--line);
+    }
+    .hero-kicker { grid-column:1/4; font-size:10px; text-transform:uppercase; letter-spacing:.16em; line-height:1.5; }
+    h1 { grid-column:1/12; align-self:center; margin:4vh 0; font-size:clamp(54px,11.4vw,164px); line-height:.82; letter-spacing:-.075em; font-weight:400; font-stretch:85%; }
+    h1 .indent { display:block; margin-left:16.5%; color:var(--brick); }
+    .hero-note { grid-column:8/11; align-self:end; max-width:28ch; font-size:13px; line-height:1.55; }
+    .hero-coordinate { grid-column:12; align-self:end; justify-self:end; writing-mode:vertical-rl; font-size:9px; letter-spacing:.12em; }
+    .line-drawing { position:absolute; inset:17% 4% 10% 48%; opacity:.2; pointer-events:none; }
+    .line-drawing path { stroke:var(--ink); stroke-width:.7; fill:none; vector-effect:non-scaling-stroke; }
+    .project { --r:0; min-height:124vh; position:relative; border-bottom:1px solid var(--line); }
+    .project-inner {
+      min-height:100vh; position:sticky; top:0; padding:clamp(92px,10vh,128px) var(--pad) 32px;
+      display:grid; grid-template-columns:repeat(12,1fr); grid-template-rows:auto 1fr auto; gap:16px 20px;
+      overflow:hidden;
+    }
+    .project-head { grid-column:1/13; display:grid; grid-template-columns:1fr auto; align-items:end; border-top:1px solid var(--ink); padding-top:10px; z-index:2; }
+    .project-head h2 { margin:0; font-size:clamp(22px,3vw,43px); letter-spacing:-.045em; font-weight:450; }
+    .project-head p { margin:0; font-size:10px; text-transform:uppercase; letter-spacing:.13em; }
+    .frame { position:relative; overflow:hidden; background:#c9c5bb; align-self:stretch; min-height:55vh; }
+    .frame::before, .frame::after {
+      content:""; position:absolute; z-index:3; inset:0; background:var(--paper);
+      pointer-events:none; will-change:transform;
+    }
+    .frame::before { transform:translate3d(calc((var(--r) * -100%)),0,0); transform-origin:left; }
+    .frame::after { transform:translate3d(calc((var(--r) * 100%)),0,0); transform-origin:right; }
+    .frame svg { width:100%; height:100%; display:block; transform:scale(calc(1.06 - var(--r) * .06)); will-change:transform; }
+    .project-meta { display:grid; grid-template-columns:1fr 1fr; gap:20px; align-items:start; font-size:11px; line-height:1.5; }
+    .project-meta p { margin:0; max-width:38ch; }
+    .project-meta dl { margin:0; display:grid; grid-template-columns:80px 1fr; }
+    .project-meta dt { color:var(--muted); }
+    .project-meta dd { margin:0; }
+    .p1 .frame { grid-column:3/13; grid-row:2; }
+    .p1 .project-meta { grid-column:3/11; grid-row:3; }
+    .p2 .frame { grid-column:1/10; grid-row:2; }
+    .p2 .project-meta { grid-column:5/13; grid-row:3; }
+    .p3 .frame { grid-column:2/12; grid-row:2; }
+    .p3 .project-meta { grid-column:2/10; grid-row:3; }
+    .index-rail {
+      position:fixed; z-index:12; left:var(--pad); top:50%; transform:translateY(-50%);
+      display:grid; gap:8px; mix-blend-mode:difference; color:#fff; font-variant-numeric:tabular-nums;
+      opacity:0; transition:opacity .25s;
+    }
+    .index-rail.show { opacity:1; }
+    .index-current { font-size:29px; letter-spacing:-.06em; }
+    .index-total { font-size:9px; letter-spacing:.15em; }
+    .rail-line { width:1px; height:82px; background:#777; position:relative; }
+    .rail-line i { position:absolute; inset:0 0 auto; height:var(--progress,0%); background:#fff; }
+    .studio { padding:clamp(90px,13vw,180px) var(--pad) 60px; display:grid; grid-template-columns:repeat(12,1fr); gap:20px; }
+    .studio-label { grid-column:1/3; font-size:10px; text-transform:uppercase; letter-spacing:.15em; }
+    .studio h2 { grid-column:4/12; margin:0 0 12vh; max-width:18ch; font-size:clamp(38px,6.2vw,88px); line-height:1; letter-spacing:-.06em; font-weight:400; }
+    .studio-copy { grid-column:4/8; font-size:15px; line-height:1.65; }
+    .studio-details { grid-column:9/12; font-size:12px; line-height:1.7; }
+    .studio-copy p, .studio-details p { margin:0 0 1.5em; }
+    footer { padding:24px var(--pad) 36px; border-top:1px solid var(--line); display:grid; grid-template-columns:1fr auto; gap:24px; align-items:end; }
+    footer a { font-size:clamp(26px,5vw,72px); letter-spacing:-.055em; border-bottom:2px solid var(--ink); }
+    footer p { margin:0; font-size:10px; line-height:1.6; text-align:right; text-transform:uppercase; letter-spacing:.1em; }
+    .reveal { opacity:0; transform:translateY(24px); transition:opacity .55s var(--ease),transform .55s var(--ease); }
+    .reveal.in { opacity:1; transform:none; }
+    @media (max-width:700px) {
+      .topbar { height:64px; grid-template-columns:1fr auto; }
+      .topbar .place { display:none; }
+      .hero { padding-top:100px; grid-template-columns:repeat(6,1fr); gap:0 10px; }
+      .hero-kicker { grid-column:1/4; }
+      h1 { grid-column:1/7; font-size:clamp(52px,20vw,78px); line-height:.86; }
+      h1 .indent { margin-left:8%; }
+      .hero-note { grid-column:2/6; font-size:12px; }
+      .hero-coordinate { display:none; }
+      .line-drawing { inset:24% -20% 22% 27%; }
+      .drawer a { grid-template-columns:34px 1fr; font-size:36px; }
+      .drawer a em { display:none; }
+      .project { min-height:112vh; }
+      .project-inner { grid-template-columns:repeat(6,1fr); gap:12px 10px; padding-top:82px; }
+      .project-head { grid-column:1/7; display:block; }
+      .project-head p { margin-top:7px; }
+      .p1 .frame,.p2 .frame,.p3 .frame { grid-column:1/7; min-height:58vh; }
+      .p1 .project-meta,.p2 .project-meta,.p3 .project-meta { grid-column:1/7; }
+      .project-meta { grid-template-columns:1fr; gap:10px; }
+      .project-meta dl { display:none; }
+      .index-rail { left:auto; right:var(--pad); top:84px; transform:none; grid-template-columns:auto auto; align-items:baseline; gap:6px; }
+      .rail-line { display:none; }
+      .index-current { font-size:20px; }
+      .studio { grid-template-columns:repeat(6,1fr); gap:16px 10px; }
+      .studio-label { grid-column:1/3; }
+      .studio h2 { grid-column:1/7; margin:10vh 0; }
+      .studio-copy { grid-column:1/7; }
+      .studio-details { grid-column:2/7; margin-top:40px; }
+      footer { grid-template-columns:1fr; }
+      footer p { text-align:left; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      html { scroll-behavior:auto; }
+      *,*::before,*::after { animation:none!important; transition:none!important; }
+      .frame::before { transform:translateX(-100%); }
+      .frame::after { transform:translateX(100%); }
+      .frame svg { transform:none; }
+      .reveal { opacity:1; transform:none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#work">Skip to projects</a>
+  <header class="topbar">
+    <a class="wordmark" href="#top" aria-label="Dhunga, home">DHUNGA</a>
+    <span class="place">Patan · Nepal</span>
+    <button class="menu" type="button" aria-expanded="false" aria-controls="menu-panel"><span>Index</span><i class="menu-lines" aria-hidden="true"></i></button>
+  </header>
+  <div class="drawer" id="menu-panel" aria-hidden="true" inert>
+    <nav aria-label="Project index">
+      <a href="#courtyard"><span>01</span>Courtyard House <em>Patan · 2024</em></a>
+      <a href="#threshold"><span>02</span>Threshold Rooms <em>Kirtipur · 2023</em></a>
+      <a href="#stone"><span>03</span>Stone Workshop <em>Godavari · 2022</em></a>
+      <a href="#studio"><span>04</span>Studio <em>Dhobighat · Since 2019</em></a>
+    </nav>
+  </div>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <p class="hero-kicker">Architecture studio<br>Brick · Stone · Light</p>
+      <h1 id="hero-title">Space,<span class="indent">held quietly.</span></h1>
+      <p class="hero-note">Dhunga is a two-person architecture practice in Patan. We make buildings from what a place already knows.</p>
+      <span class="hero-coordinate">27.6710° N / 85.4298° E</span>
+      <svg class="line-drawing" viewBox="0 0 600 500" aria-hidden="true">
+        <path d="M30 423 260 64l290 149-230 240Z M260 64v281l290-132M30 423l290 30V345L30 423Zm290-78 230-132v141L320 453M126 273l194 72M399 141v146M480 177v154"/>
+      </svg>
+    </section>
+
+    <div class="index-rail" aria-hidden="true">
+      <span class="index-current">01</span><span class="index-total">/ 03</span>
+      <span class="rail-line"><i></i></span>
+    </div>
+
+    <section id="work" aria-label="Selected projects">
+      <article class="project p1" id="courtyard" data-index="1">
+        <div class="project-inner">
+          <header class="project-head"><h2>Courtyard House</h2><p>01 / Residence · Patan</p></header>
+          <figure class="frame" aria-label="Brick courtyard house around a square of sky">
+            <svg viewBox="0 0 1200 760" role="img" aria-label="Architectural study of Courtyard House">
+              <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#d9d9d5"/><stop offset="1" stop-color="#f0eee8"/></linearGradient><linearGradient id="shade" x2="1" y2="1"><stop stop-color="#6d3029"/><stop offset="1" stop-color="#a05b4b"/></linearGradient><pattern id="brick" width="48" height="22" patternUnits="userSpaceOnUse"><rect width="48" height="22" fill="#9a5547"/><path d="M0 21.5h48M24 0v22M0 11h48M12 11v11M36 11v11" stroke="#70382f" stroke-width="1" opacity=".45"/></pattern></defs>
+              <rect width="1200" height="760" fill="url(#sky)"/><polygon points="0,150 830,88 1200,228 1200,760 0,760" fill="url(#brick)"/>
+              <polygon points="260,235 792,179 980,288 980,760 260,760" fill="#351e1a"/>
+              <polygon points="330,291 755,247 886,326 886,704 330,704" fill="#d6d4ce"/>
+              <polygon points="330,291 755,247 886,326 452,371" fill="#f4f1e8"/>
+              <rect x="452" y="371" width="434" height="333" fill="#b6b4ad"/>
+              <polygon points="452,371 886,326 886,704 452,704" fill="#b9b7af"/>
+              <rect x="520" y="440" width="148" height="264" fill="#292521"/><rect x="713" y="415" width="112" height="165" fill="#73655a"/>
+              <polygon points="0,648 1200,560 1200,760 0,760" fill="#756f64"/><polygon points="0,648 452,620 600,760 0,760" fill="#4d473f"/>
+              <path d="M0 676 1200 586M0 720l1200-92M210 634l140 126M400 620l159 140M820 590l202 170" stroke="#a49e91" stroke-width="2" opacity=".35"/>
+              <rect x="108" y="245" width="74" height="254" fill="#42221d"/><rect x="1060" y="302" width="62" height="190" fill="#3e211d"/>
+            </svg>
+          </figure>
+          <div class="project-meta reveal">
+            <p>A narrow family home folded around an open square. Reused dachi appa brick moderates the summer heat; the court returns sky and monsoon rain to every room.</p>
+            <dl><dt>Completed</dt><dd>2024</dd><dt>Area</dt><dd>286 m²</dd><dt>Material</dt><dd>Salvaged brick, lime, sal</dd></dl>
+          </div>
+        </div>
+      </article>
+
+      <article class="project p2" id="threshold" data-index="2">
+        <div class="project-inner">
+          <header class="project-head"><h2>Threshold Rooms</h2><p>02 / Guest house · Kirtipur</p></header>
+          <figure class="frame" aria-label="Deep stone thresholds framing a distant valley">
+            <svg viewBox="0 0 1200 760" role="img" aria-label="Architectural study of Threshold Rooms">
+              <defs><linearGradient id="valley" x2="0" y2="1"><stop stop-color="#c9d0cc"/><stop offset=".55" stop-color="#8b9489"/><stop offset="1" stop-color="#596056"/></linearGradient><pattern id="stonepat" width="110" height="56" patternUnits="userSpaceOnUse"><rect width="110" height="56" fill="#817e74"/><path d="M0 54h110M32 0l-6 54M80 0l8 54" stroke="#5d5a53" stroke-width="2"/></pattern></defs>
+              <rect width="1200" height="760" fill="#34332f"/><rect x="236" y="77" width="738" height="612" fill="url(#stonepat)"/>
+              <rect x="344" y="141" width="520" height="487" fill="#151816"/>
+              <rect x="420" y="194" width="368" height="375" fill="url(#valley)"/>
+              <path d="M420 444 535 363l87 49 81-79 85 83v153H420Z" fill="#4c574e"/><path d="m420 487 109-55 86 28 92-69 81 55v123H420Z" fill="#38443b"/>
+              <polygon points="0,0 236,77 236,689 0,760" fill="#4a4944"/><polygon points="1200,0 974,77 974,689 1200,760" fill="#272824"/>
+              <polygon points="0,760 236,689 974,689 1200,760" fill="#6d695f"/><polygon points="236,689 344,628 864,628 974,689" fill="#989185"/>
+              <path d="M236 689 344 628M974 689 864 628M0 760h1200" stroke="#bbb3a5" opacity=".4"/>
+              <rect x="569" y="628" width="74" height="15" fill="#373630"/>
+            </svg>
+          </figure>
+          <div class="project-meta reveal">
+            <p>Four rooms share one long wall and four different depths. Each opening edits the valley: a seat, a shadow, a view, then weather.</p>
+            <dl><dt>Completed</dt><dd>2023</dd><dt>Area</dt><dd>412 m²</dd><dt>Material</dt><dd>Pharping stone, timber, lime</dd></dl>
+          </div>
+        </div>
+      </article>
+
+      <article class="project p3" id="stone" data-index="3">
+        <div class="project-inner">
+          <header class="project-head"><h2>Stone Workshop</h2><p>03 / Workplace · Godavari</p></header>
+          <figure class="frame" aria-label="A stone workshop lit by narrow roof openings">
+            <svg viewBox="0 0 1200 760" role="img" aria-label="Architectural study of Stone Workshop">
+              <defs><linearGradient id="beam" x1="0" y1="0" x2=".6" y2="1"><stop stop-color="#fffce8" stop-opacity=".9"/><stop offset="1" stop-color="#fff6d5" stop-opacity="0"/></linearGradient><pattern id="rubble" width="90" height="64" patternUnits="userSpaceOnUse"><rect width="90" height="64" fill="#66645e"/><path d="M0 35 35 31 49 0M35 31l21 33M49 0l41 21M56 64l34-17" stroke="#45443f" stroke-width="2"/></pattern></defs>
+              <rect width="1200" height="760" fill="#22231f"/><polygon points="0,0 1200,0 1080,410 112,410" fill="#3a3b35"/>
+              <polygon points="0,0 400,0 510,410 112,410" fill="url(#rubble)"/><polygon points="824,0 1200,0 1080,410 708,410" fill="url(#rubble)"/>
+              <polygon points="0,410 1200,410 1200,760 0,760" fill="#57564f"/>
+              <polygon points="430,0 540,0 720,680 548,680" fill="url(#beam)"/><polygon points="702,0 758,0 900,552 814,552" fill="url(#beam)" opacity=".65"/>
+              <rect x="134" y="364" width="258" height="234" fill="#1b1c19"/><rect x="844" y="342" width="198" height="256" fill="#292a26"/>
+              <polygon points="350,557 736,526 857,598 455,634" fill="#817f76"/><polygon points="455,634 857,598 857,641 455,682" fill="#45443e"/><polygon points="350,557 455,634 455,682 350,596" fill="#5c5a53"/>
+              <g fill="#aaa69a"><rect x="506" y="498" width="66" height="55" transform="rotate(-4 506 498)"/><rect x="598" y="482" width="91" height="55" transform="rotate(-5 598 482)"/></g>
+              <path d="M0 710 1200 650M160 410v318M1040 410v258" stroke="#88857d" opacity=".35"/>
+            </svg>
+          </figure>
+          <div class="project-meta reveal">
+            <p>A working shed for masons and carvers. North-light slots mark the cutting tables; thick rubble walls hold a steady temperature through the day.</p>
+            <dl><dt>Completed</dt><dd>2022</dd><dt>Area</dt><dd>198 m²</dd><dt>Material</dt><dd>Local granite, steel, lime</dd></dl>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="studio" id="studio" aria-labelledby="studio-title">
+      <p class="studio-label">04 / Practice</p>
+      <h2 id="studio-title" class="reveal">Two people. One table. Close attention.</h2>
+      <div class="studio-copy reveal"><p>Dhunga was founded in Patan in 2019 by architects Nima Shrestha and Aarya Maharjan.</p><p>We work at the scale of the room and the settlement: houses, places of work, and careful adaptations of existing buildings.</p></div>
+      <div class="studio-details reveal"><p>Our process begins with measured drawings, material samples, and long conversations with the people who will build and inhabit the work.</p><p>New commissions and collaborations<br><a href="mailto:studio@dhunga.work"><u>studio@dhunga.work</u></a><br>Dhobighat, Lalitpur</p></div>
+    </section>
+  </main>
+  <footer>
+    <a href="mailto:studio@dhunga.work">Start a conversation ↗</a>
+    <p>Dhunga Architecture<br>Patan · Nepal</p>
+  </footer>
+  <script>
+    (() => {
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const projects = [...document.querySelectorAll('.project')];
+      const rail = document.querySelector('.index-rail');
+      const current = document.querySelector('.index-current');
+      const meter = document.querySelector('.rail-line i');
+      const menu = document.querySelector('.menu');
+      const drawer = document.querySelector('.drawer');
+      let ticking = false;
+
+      function update() {
+        const h = innerHeight;
+        let active = 0;
+        projects.forEach((project, i) => {
+          const rect = project.getBoundingClientRect();
+          const raw = (h * .82 - rect.top) / (rect.height * .52);
+          const reveal = Math.max(0, Math.min(1, raw));
+          project.style.setProperty('--r', reduced ? 1 : reveal.toFixed(3));
+          if (rect.top < h * .52 && rect.bottom > h * .42) active = i;
+        });
+        const work = document.getElementById('work').getBoundingClientRect();
+        const inWork = work.top < h * .65 && work.bottom > h * .25;
+        rail.classList.toggle('show', inWork);
+        current.textContent = String(active + 1).padStart(2, '0');
+        const total = document.getElementById('work').offsetHeight - h;
+        const progress = Math.max(0, Math.min(1, -work.top / total));
+        meter.style.setProperty('--progress', `${progress * 100}%`);
+        ticking = false;
+      }
+      addEventListener('scroll', () => { if (!ticking) { requestAnimationFrame(update); ticking = true; } }, {passive:true});
+      addEventListener('resize', update, {passive:true});
+      update();
+
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('in'); observer.unobserve(entry.target); } });
+      }, {threshold:.18});
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+      function closeMenu() {
+        drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true');
+        drawer.setAttribute('inert', '');
+        menu.setAttribute('aria-expanded','false'); menu.querySelector('span').textContent = 'Index';
+      }
+      menu.addEventListener('click', () => {
+        const open = menu.getAttribute('aria-expanded') !== 'true';
+        drawer.classList.toggle('open', open); drawer.setAttribute('aria-hidden', String(!open));
+        if (open) drawer.removeAttribute('inert'); else drawer.setAttribute('inert', '');
+        menu.setAttribute('aria-expanded', String(open)); menu.querySelector('span').textContent = open ? 'Close' : 'Index';
+        if (open) drawer.querySelector('a').focus();
+      });
+      drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+      addEventListener('keydown', e => { if (e.key === 'Escape') { closeMenu(); menu.focus(); } });
+    })();
+  </script>
+</body>
+</html>

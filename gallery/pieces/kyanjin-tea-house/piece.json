@@ -7,5 +7,20 @@
     "signature": "Every tea is presented by the elevation of its garden, on a contour-line altitude scale that structures the whole catalogue."
   },
   "created": "2026-07-18T09:00:00Z",
-  "generatedBy": "hand-directed showcase"
+  "generatedBy": "hand-directed showcase",
+  "dna": {
+    "archetype": "commerce",
+    "palette": {
+      "value": "light",
+      "temperature": "warm",
+      "accent_hue": 20,
+      "saturation": "muted"
+    },
+    "type_voice": "serif-editorial",
+    "layout": "broadsheet",
+    "density": "medium",
+    "motion": "micro-only",
+    "shape": "sharp",
+    "texture": "paper"
+  }
 }

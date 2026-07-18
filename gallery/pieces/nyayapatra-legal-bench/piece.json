@@ -7,5 +7,20 @@
     "signature": "A citation-trail results list where every case shows its precedent strength and treatment history inline, so authority is visible before the case is opened."
   },
   "created": "2026-07-18T09:05:00Z",
-  "generatedBy": "hand-directed showcase"
+  "generatedBy": "hand-directed showcase",
+  "dna": {
+    "archetype": "dense-app",
+    "palette": {
+      "value": "light",
+      "temperature": "warm",
+      "accent_hue": 8,
+      "saturation": "muted"
+    },
+    "type_voice": "serif+sans",
+    "layout": "sidebar-app",
+    "density": "dense",
+    "motion": "micro-only",
+    "shape": "soft",
+    "texture": "flat"
+  }
 }

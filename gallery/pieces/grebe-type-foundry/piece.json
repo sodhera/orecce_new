@@ -1,0 +1,21 @@
+{
+  "title": "Grebe Type Foundry",
+  "prompt": "A specimen site for a small independent type foundry. The type itself should be the entire show — and it should react to me.",
+  "direction": {
+    "name": "Living specimen",
+    "thesis": "A stark bone-and-black broadsheet where the typefaces are the only imagery — and they're alive: letters swell as the cursor passes through them, proving the variable axes by touch instead of description.",
+    "signature": "Cursor-proximity variable-font weight: each hero letter interpolates 340→900 by distance to the pointer, with a custom lagged cursor and a magnetic license button."
+  },
+  "dna": {
+    "archetype": "commerce",
+    "palette": { "value": "light", "temperature": "neutral", "accent_hue": 5, "saturation": "vivid" },
+    "type_voice": "didone",
+    "layout": "single-column",
+    "density": "airy",
+    "motion": "cursor-reactive",
+    "shape": "sharp",
+    "texture": "flat"
+  },
+  "created": "2026-07-18T12:20:00Z",
+  "generatedBy": "hand-directed flagship · cursor-reactive pattern"
+}
