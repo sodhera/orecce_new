@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kyanjin Tea House — teas of the high gardens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #f4efe6;
+  --paper-deep: #ece5d6;
+  --ink: #2b2a24;
+  --ink-soft: #5c584c;
+  --ink-faint: #8b8574;
+  --pine: #33402e;
+  --copper: #a4552e;
+  --line: #d8cfba;
+  --serif: "Fraunces", Georgia, serif;
+  --sans: "Inter", -apple-system, sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid var(--copper); outline-offset: 3px; }
+.serif { font-family: var(--serif); }
+
+/* ————— header ————— */
+header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 22px clamp(20px, 5vw, 64px);
+  border-bottom: 1px solid var(--line);
+  position: sticky; top: 0; background: rgba(244,239,230,.92); backdrop-filter: blur(8px);
+  z-index: 10;
+}
+.brand { font-family: var(--serif); font-size: 21px; font-weight: 500; letter-spacing: .01em; }
+.brand small { display: block; font-family: var(--sans); font-size: 10px; letter-spacing: .28em; text-transform: uppercase; color: var(--ink-faint); margin-top: 1px; }
+nav { display: flex; gap: clamp(16px, 3vw, 36px); font-size: 13.5px; }
+nav a { color: var(--ink-soft); padding: 4px 0; border-bottom: 1px solid transparent; transition: color .15s, border-color .15s; }
+nav a:hover { color: var(--ink); border-color: var(--copper); }
+.cart { font-size: 13.5px; color: var(--pine); font-weight: 500; }
+
+/* ————— hero ————— */
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(24px, 4vw, 64px);
+  padding: clamp(48px, 8vw, 110px) clamp(20px, 5vw, 64px) clamp(40px, 6vw, 80px);
+  align-items: end;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+  overflow: hidden;
+}
+.hero h1 {
+  font-family: var(--serif);
+  font-weight: 340;
+  font-size: clamp(40px, 6.4vw, 84px);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+}
+.hero h1 em { font-style: italic; color: var(--pine); }
+.hero .lede {
+  color: var(--ink-soft);
+  font-size: 16.5px;
+  max-width: 44ch;
+  margin-top: 22px;
+}
+.hero .meta {
+  margin-top: 34px;
+  display: flex; gap: 28px; flex-wrap: wrap;
+  font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint);
+}
+.hero .meta b { display: block; font-family: var(--serif); font-size: 22px; letter-spacing: 0; text-transform: none; color: var(--ink); font-weight: 500; }
+.hero-art { position: relative; min-height: 280px; }
+.hero-art svg { width: 100%; height: 100%; display: block; }
+
+/* ————— altitude catalogue ————— */
+.section-head {
+  padding: clamp(40px, 6vw, 72px) clamp(20px, 5vw, 64px) 8px;
+  display: flex; align-items: baseline; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+}
+.kicker { font-size: 11px; letter-spacing: .26em; text-transform: uppercase; color: var(--copper); font-weight: 600; }
+.section-head h2 { font-family: var(--serif); font-weight: 380; font-size: clamp(26px, 3.4vw, 40px); letter-spacing: -0.01em; margin-top: 8px; }
+.section-head p { color: var(--ink-faint); font-size: 13.5px; max-width: 38ch; }
+
+.catalogue { padding: 18px 0 clamp(48px, 7vw, 90px); }
+.tea {
+  display: grid;
+  grid-template-columns: 110px minmax(0,5fr) minmax(0,4fr) 150px;
+  gap: clamp(16px, 3vw, 40px);
+  align-items: center;
+  padding: 26px clamp(20px, 5vw, 64px);
+  border-top: 1px solid var(--line);
+  transition: background .2s;
+  position: relative;
+}
+.tea:last-child { border-bottom: 1px solid var(--line); }
+.tea:hover { background: var(--paper-deep); }
+.tea .alt {
+  font-family: var(--serif);
+  font-size: 15px;
+  color: var(--pine);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.tea .alt small { display: block; font-family: var(--sans); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-faint); }
+.tea h3 { font-family: var(--serif); font-weight: 480; font-size: 23px; letter-spacing: -0.005em; }
+.tea .origin { font-size: 12.5px; color: var(--ink-faint); margin-top: 3px; }
+.tea .notes { font-size: 14px; color: var(--ink-soft); font-style: italic; font-family: var(--serif); font-weight: 340; }
+.tea .buy { text-align: right; }
+.tea .price { font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.tea .price small { color: var(--ink-faint); font-weight: 400; }
+.tea button {
+  margin-top: 8px;
+  font: 12.5px/1 var(--sans); font-weight: 600;
+  color: var(--paper);
+  background: var(--pine);
+  border: none; border-radius: 999px;
+  padding: 9px 18px;
+  cursor: pointer;
+  transition: background .15s, transform .1s;
+}
+.tea button:hover { background: #24301f; }
+.tea button:active { transform: scale(.96); }
+.tea .contour {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+  background: linear-gradient(180deg, var(--copper), transparent);
+  opacity: 0; transition: opacity .2s;
+}
+.tea:hover .contour { opacity: 1; }
+
+/* ————— story ————— */
+.story {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  border-top: 1px solid var(--line);
+}
+.story-text { padding: clamp(40px, 6vw, 88px) clamp(20px, 5vw, 64px); }
+.story-text h2 { font-family: var(--serif); font-weight: 380; font-size: clamp(26px, 3.2vw, 38px); line-height: 1.15; max-width: 20ch; }
+.story-text p { color: var(--ink-soft); margin-top: 20px; max-width: 54ch; }
+.story-text .sig { margin-top: 32px; font-family: var(--serif); font-style: italic; font-size: 17px; color: var(--pine); }
+.story-text .sig small { display: block; font-family: var(--sans); font-style: normal; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-faint); margin-top: 4px; }
+.story-art { background: var(--pine); position: relative; min-height: 320px; overflow: hidden; }
+.story-art svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* ————— practical ————— */
+.practical {
+  display: grid; grid-template-columns: repeat(3, minmax(0,1fr));
+  border-top: 1px solid var(--line);
+}
+.practical > div { padding: clamp(28px, 4vw, 48px) clamp(20px, 4vw, 56px); border-left: 1px solid var(--line); }
+.practical > div:first-child { border-left: none; }
+.practical h4 { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--copper); font-weight: 600; margin-bottom: 10px; }
+.practical p { font-size: 14px; color: var(--ink-soft); }
+
+footer {
+  border-top: 1px solid var(--line);
+  padding: 30px clamp(20px, 5vw, 64px) 44px;
+  display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+  font-size: 12.5px; color: var(--ink-faint);
+}
+
+/* toast */
+#toast {
+  position: fixed; bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--ink); color: var(--paper);
+  font-size: 13.5px; border-radius: 999px; padding: 11px 24px;
+  transition: transform .35s cubic-bezier(.2,.9,.3,1.2);
+  z-index: 40;
+}
+#toast.show { transform: translateX(-50%) translateY(0); }
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-art { min-height: 180px; order: -1; }
+  .tea { grid-template-columns: 84px minmax(0,1fr); grid-template-rows: auto auto; row-gap: 10px; }
+  .tea .notes { grid-column: 2; }
+  .tea .buy { grid-column: 1 / -1; text-align: left; display: flex; align-items: center; gap: 16px; }
+  .tea button { margin-top: 0; }
+  .story { grid-template-columns: 1fr; }
+  .story-art { min-height: 200px; }
+  .practical { grid-template-columns: 1fr; }
+  .practical > div { border-left: none; border-top: 1px solid var(--line); }
+  nav { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">Kyanjin Tea House<small>Langtang · est. 1987</small></div>
+  <nav aria-label="Main">
+    <a href="#teas">The teas</a>
+    <a href="#story">The gardens</a>
+    <a href="#practical">Shipping</a>
+  </nav>
+  <a class="cart" href="#teas" id="cart">Basket · <span id="cart-count">0</span></a>
+</header>
+
+<section class="hero">
+  <div>
+    <p class="kicker">Six gardens · one valley</p>
+    <h1 style="margin-top:14px">Tea from <em>2,100 metres</em> and higher.</h1>
+    <p class="lede">We are a family tea house in the Langtang valley. Each spring we walk to
+    six gardens between Syabrubesi and Kyanjin Gompa, taste with the growers, and buy only
+    the lots we would keep for ourselves. Whole leaf, one harvest, shipped worldwide.</p>
+    <div class="meta">
+      <span><b>38</b>years buying</span>
+      <span><b>6</b>gardens</span>
+      <span><b>2,100–3,800 m</b>elevation range</span>
+    </div>
+  </div>
+  <div class="hero-art" aria-hidden="true">
+    <!-- contour-line hillside -->
+    <svg viewBox="0 0 420 320" fill="none">
+      <g stroke="#a4552e" stroke-width="1.1" opacity=".85">
+        <path d="M0 300 C90 285 160 290 240 268 C320 248 370 252 420 236"/>
+        <path d="M0 272 C80 258 150 262 235 238 C315 218 372 224 420 206"/>
+        <path d="M0 243 C85 228 145 230 228 206 C310 184 368 194 420 174"/>
+        <path d="M0 212 C75 199 150 198 222 172 C300 146 362 160 420 140"/>
+        <path d="M0 180 C90 165 140 163 214 138 C290 112 355 126 420 104"/>
+        <path d="M12 148 C95 133 148 128 210 104 C280 78 348 92 420 68"/>
+        <path d="M40 116 C110 101 160 94 216 72 C280 48 345 58 408 36"/>
+        <path d="M84 84 C140 70 185 62 232 44 C285 24 330 28 384 10"/>
+      </g>
+      <g font-family="Inter, sans-serif" font-size="9" fill="#8b8574" letter-spacing=".12em">
+        <text x="6" y="294">2100</text>
+        <text x="6" y="236">2600</text>
+        <text x="6" y="173">3100</text>
+        <text x="18" y="110">3500</text>
+        <text x="60" y="78">3800</text>
+      </g>
+      <circle cx="238" cy="240" r="4" fill="#33402e"/>
+      <circle cx="216" cy="140" r="4" fill="#33402e"/>
+      <circle cx="230" cy="46" r="4" fill="#33402e"/>
+      <g font-family="Fraunces, serif" font-size="11.5" fill="#2b2a24" font-style="italic">
+        <text x="250" y="244">Thulo Syabru garden</text>
+        <text x="228" y="144">Sherpagaon terraces</text>
+        <text x="242" y="50">Kyanjin high plots</text>
+      </g>
+    </svg>
+  </div>
+</section>
+
+<div class="section-head" id="teas">
+  <div>
+    <p class="kicker">Spring 2026 lots</p>
+    <h2>The catalogue, by altitude</h2>
+  </div>
+  <p>Elevation shapes the leaf more than anything else we know. Read the catalogue the way
+  the valley rises.</p>
+</div>
+
+<section class="catalogue" aria-label="Tea catalogue">
+  <article class="tea">
+    <span class="contour"></span>
+    <div class="alt">2,140 m<small>Thulo Syabru</small></div>
+    <div>
+      <h3>First Flush Green</h3>
+      <p class="origin">Picked 14–19 March · Pasang Lama's south terraces</p>
+    </div>
+    <p class="notes">"Fresh pea shoot, warm stone after rain, a long clean finish."</p>
+    <div class="buy">
+      <p class="price">€18 <small>/ 50 g</small></p>
+      <button data-name="First Flush Green">Add to basket</button>
+    </div>
+  </article>
+
+  <article class="tea">
+    <span class="contour"></span>
+    <div class="alt">2,480 m<small>Bamboo Village</small></div>
+    <div>
+      <h3>Smoked Amber Oolong</h3>
+      <p class="origin">Withered over juniper embers · 22 kg produced</p>
+    </div>
+    <p class="notes">"Dried apricot and juniper smoke; the tea our grandfather drank."</p>
+    <div class="buy">
+      <p class="price">€24 <small>/ 50 g</small></p>
+      <button data-name="Smoked Amber Oolong">Add to basket</button>
+    </div>
+  </article>
+
+  <article class="tea">
+    <span class="contour"></span>
+    <div class="alt">2,870 m<small>Sherpagaon</small></div>
+    <div>
+      <h3>Sherpagaon Black</h3>
+      <p class="origin">Full oxidation, hand-rolled · Dolma Sherpa's plot</p>
+    </div>
+    <p class="notes">"Dark honey, walnut skin, and the sweetness that only cold nights give."</p>
+    <div class="buy">
+      <p class="price">€21 <small>/ 50 g</small></p>
+      <button data-name="Sherpagaon Black">Add to basket</button>
+    </div>
+  </article>
+
+  <article class="tea">
+    <span class="contour"></span>
+    <div class="alt">3,420 m<small>Langtang village</small></div>
+    <div>
+      <h3>Cloud Forest White</h3>
+      <p class="origin">Two days of sun-withering · buds only · 9 kg produced</p>
+    </div>
+    <p class="notes">"Barely there, then suddenly everywhere — alpine flowers and snowmelt."</p>
+    <div class="buy">
+      <p class="price">€36 <small>/ 50 g</small></p>
+      <button data-name="Cloud Forest White">Add to basket</button>
+    </div>
+  </article>
+
+  <article class="tea">
+    <span class="contour"></span>
+    <div class="alt">3,800 m<small>Kyanjin Gompa</small></div>
+    <div>
+      <h3>Yak Butter Blend</h3>
+      <p class="origin">Roasted black tea cut for churning · the trekkers' favourite</p>
+    </div>
+    <p class="notes">"Made to carry butter and salt at altitude; startlingly good with milk."</p>
+    <div class="buy">
+      <p class="price">€14 <small>/ 100 g</small></p>
+      <button data-name="Yak Butter Blend">Add to basket</button>
+    </div>
+  </article>
+</section>
+
+<section class="story" id="story">
+  <div class="story-text">
+    <p class="kicker">Why a tea house, not a brand</p>
+    <h2>We don't own the gardens. We know them.</h2>
+    <p>Kyanjin Tea House began as an actual tea house — four tables beside the trail, run by
+    our grandmother Nyima. Trekkers kept asking to take the tea home. Forty years later we
+    still work the same way: the growers set their prices, we pay before harvest, and every
+    packet names the person who picked it.</p>
+    <p>After the 2015 earthquake we rebuilt with the village, and one euro from every packet
+    still goes to the Langtang school rebuild fund. That is not a marketing line; the
+    receipts are published every December.</p>
+    <p class="sig">— Tenzin &amp; Pema Lama<small>third generation, Kyanjin Gompa</small></p>
+  </div>
+  <div class="story-art" aria-hidden="true">
+    <svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice">
+      <rect width="400" height="400" fill="#33402e"/>
+      <g stroke="#f4efe6" stroke-width="1" opacity=".33" fill="none">
+        <path d="M-20 340 C80 320 140 330 220 300 C300 272 360 282 420 258"/>
+        <path d="M-20 300 C70 282 150 288 230 256 C310 228 365 240 420 214"/>
+        <path d="M-20 258 C85 240 145 242 235 208 C315 180 370 194 420 168"/>
+        <path d="M-20 214 C75 198 150 196 228 164 C305 134 368 150 420 122"/>
+        <path d="M-20 170 C90 152 140 148 220 118 C298 90 360 106 420 78"/>
+        <path d="M0 126 C95 108 148 100 216 74 C286 48 352 62 420 34"/>
+      </g>
+      <g fill="#f4efe6" opacity=".9">
+        <circle cx="228" cy="210" r="5"/>
+        <text x="242" y="214" font-family="Fraunces, serif" font-size="13" font-style="italic">the tea house, 3,830 m</text>
+      </g>
+      <path d="M228 210 C200 260 180 290 150 340" stroke="#a4552e" stroke-width="1.6" stroke-dasharray="3 5" fill="none"/>
+      <text x="60" y="360" font-family="Fraunces, serif" font-size="11" font-style="italic" fill="#f4efe6" opacity=".7">the walk down to the gardens</text>
+    </svg>
+  </div>
+</section>
+
+<section class="practical" id="practical">
+  <div>
+    <h4>Shipping</h4>
+    <p>Weekly dispatch from Kathmandu every Monday. EU &amp; UK 6–9 days (€6, free over €60);
+    North America 8–12 days (€9); elsewhere by quote. Every parcel is trackable.</p>
+  </div>
+  <div>
+    <h4>Freshness</h4>
+    <p>We sell one harvest per year and print the picking dates on every packet. When a lot
+    runs out, it's gone until next spring — we will not blend to stretch it.</p>
+  </div>
+  <div>
+    <h4>Brewing</h4>
+    <p>Each packet carries the grower's own brewing note. As a rule: more leaf, cooler
+    water, shorter steeps — high-altitude leaf is generous and forgives nothing.</p>
+  </div>
+</section>
+
+<footer>
+  <span>Kyanjin Tea House · Langtang, Rasuwa District, Nepal</span>
+  <span>namaste@kyanjintea.np · replies within two days, monsoon permitting</span>
+</footer>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+let count = 0;
+const toast = document.getElementById('toast');
+let toastTimer;
+document.querySelectorAll('.tea button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    count++;
+    document.getElementById('cart-count').textContent = count;
+    toast.textContent = btn.dataset.name + ' added to your basket';
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
+  });
+});
+</script>
+</body>
+</html>

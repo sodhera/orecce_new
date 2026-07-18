@@ -1,0 +1,12 @@
+{
+  "name": "orecce",
+  "version": "0.1.0",
+  "description": "Orécce — the visual guru. A design-intelligence skill for coding agents plus a localhost studio that turns one prompt into three polished design directions.",
+  "private": true,
+  "scripts": {
+    "start": "node studio/server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

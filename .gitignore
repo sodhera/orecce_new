@@ -1,0 +1,6 @@
+node_modules/
+.DS_Store
+# runtime output — generated projects stay local; showcase lives in workspace/showcase
+workspace/generated/
+*.log
+.agent-last-message.txt

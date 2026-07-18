@@ -1,0 +1,22 @@
+{
+  "id": "song-game",
+  "prompt": "A song-guessing game for groups of friends. It should feel energetic, instantly understandable, socially competitive, and fun on both phones and laptops.",
+  "createdAt": "2026-07-18T09:10:00.000Z",
+  "provider": "showcase · hand-directed",
+  "showcase": true,
+  "title": "Song-guessing party game — playful consumer",
+  "variants": [
+    {
+      "n": 1,
+      "lens": "default",
+      "lensLabel": "Confident default",
+      "state": "complete",
+      "iterations": [1],
+      "direction": {
+        "name": "Vinyl countdown",
+        "thesis": "A loud, warm party screen built around one object — a spinning record that is also the round timer — with chunky type, three confident colors, and scores that move like a crowd reacting.",
+        "signature": "The vinyl record IS the timer: it spins while the clip plays and its groove sweeps away as time runs out."
+      }
+    }
+  ]
+}

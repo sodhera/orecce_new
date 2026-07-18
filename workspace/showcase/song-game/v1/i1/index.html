@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ENCORE! — the song guessing game</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #fdf6e9;
+  --ink: #1d1b33;
+  --cobalt: #2f45ff;
+  --coral: #ff5b4a;
+  --lemon: #ffd23e;
+  --mint: #3ecf8e;
+  --display: "Bricolage Grotesque", "Arial Black", sans-serif;
+  --body: "Space Grotesk", -apple-system, sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--body);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+button, input { font: inherit; }
+:focus-visible { outline: 3px solid var(--cobalt); outline-offset: 2px; border-radius: 6px; }
+
+/* ————— top ————— */
+.top {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px clamp(16px, 4vw, 40px);
+  border-bottom: 3px solid var(--ink);
+  background: var(--cream);
+}
+.logo {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 24px;
+  letter-spacing: -0.02em;
+  transform: rotate(-1.5deg);
+}
+.logo span { color: var(--coral); }
+.room {
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 700; font-size: 14px;
+}
+.room .code {
+  background: var(--ink); color: var(--cream);
+  font-family: var(--display); letter-spacing: .14em;
+  border-radius: 8px; padding: 5px 12px;
+}
+.round-pill {
+  background: var(--lemon);
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  padding: 5px 14px;
+  font-weight: 700; font-size: 13px;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+/* ————— stage ————— */
+.stage {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+  gap: clamp(16px, 3vw, 36px);
+  padding: clamp(18px, 4vw, 44px) clamp(16px, 4vw, 40px);
+  max-width: 1180px;
+  width: 100%;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.play { text-align: center; }
+.prompt-lbl {
+  display: inline-block;
+  font-weight: 700; font-size: 13px; letter-spacing: .18em; text-transform: uppercase;
+  background: var(--cobalt); color: var(--cream);
+  border-radius: 999px; padding: 6px 16px;
+  transform: rotate(1deg);
+}
+.play h1 {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(30px, 5vw, 52px);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  margin: 18px auto 8px;
+  max-width: 16ch;
+}
+.play .sub { font-size: 15px; opacity: .7; font-weight: 500; }
+
+/* vinyl timer */
+.vinyl-wrap { position: relative; width: min(320px, 68vw); margin: 30px auto 8px; }
+.vinyl { width: 100%; display: block; animation: spin 2.2s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.time-left {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  pointer-events: none;
+}
+.time-left b {
+  font-family: var(--display); font-weight: 800;
+  font-size: clamp(40px, 7vw, 62px);
+  color: var(--cream);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.time-left span { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--cream); opacity: .75; font-weight: 700; }
+.timer-ring { position: absolute; inset: -7px; transform: rotate(-90deg); }
+.timer-ring circle { fill: none; stroke-width: 7; stroke-linecap: round; }
+.timer-ring .track { stroke: rgba(29,27,51,.15); }
+.timer-ring .left { stroke: var(--coral); stroke-dasharray: 302; stroke-dashoffset: 75; transition: stroke-dashoffset 1s linear; }
+
+/* guess bar */
+.guess {
+  display: flex; gap: 10px;
+  max-width: 460px; margin: 26px auto 0;
+}
+.guess input {
+  flex: 1;
+  border: 3px solid var(--ink);
+  border-radius: 14px;
+  background: #fff;
+  padding: 13px 18px;
+  font-size: 16px; font-weight: 500;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.guess input::placeholder { color: #9b98ad; }
+.guess button {
+  font-family: var(--display); font-weight: 800; font-size: 16px;
+  background: var(--coral); color: var(--cream);
+  border: 3px solid var(--ink);
+  border-radius: 14px;
+  padding: 0 26px;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 var(--ink);
+  transition: transform .08s, box-shadow .08s;
+}
+.guess button:hover { transform: translate(-1px,-1px); box-shadow: 5px 5px 0 var(--ink); }
+.guess button:active { transform: translate(3px,3px); box-shadow: 1px 1px 0 var(--ink); }
+
+.hint-chips { margin-top: 16px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.hint-chip {
+  font-size: 12.5px; font-weight: 700;
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 5px 13px;
+  cursor: pointer;
+  transition: background .12s;
+}
+.hint-chip:hover { background: var(--lemon); }
+.hint-chip b { color: var(--cobalt); }
+
+/* ————— scoreboard ————— */
+.board {
+  background: #fff;
+  border: 3px solid var(--ink);
+  border-radius: 18px;
+  box-shadow: 6px 6px 0 var(--ink);
+  overflow: hidden;
+}
+.board h2 {
+  font-family: var(--display); font-weight: 800; font-size: 17px;
+  padding: 14px 18px 12px;
+  border-bottom: 3px solid var(--ink);
+  background: var(--lemon);
+  display: flex; justify-content: space-between; align-items: baseline;
+}
+.board h2 small { font-family: var(--body); font-weight: 700; font-size: 11px; letter-spacing: .1em; }
+.player {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 16px;
+  border-bottom: 2px dashed rgba(29,27,51,.15);
+  transition: background .15s;
+}
+.player:last-child { border-bottom: none; }
+.player.guessed { background: #e9fbf2; }
+.player .face {
+  width: 34px; height: 34px; flex: none;
+  border: 2.5px solid var(--ink);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  background: var(--cream);
+}
+.player .name { font-weight: 700; font-size: 14.5px; }
+.player .status { font-size: 11.5px; opacity: .6; font-weight: 500; }
+.player .pts {
+  margin-left: auto;
+  font-family: var(--display); font-weight: 800; font-size: 17px;
+  font-variant-numeric: tabular-nums;
+}
+.player .delta {
+  font-size: 11px; font-weight: 700; color: var(--mint);
+  animation: pop .5s cubic-bezier(.2,1.6,.4,1);
+}
+@keyframes pop { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+.streak {
+  margin-top: 16px;
+  background: var(--cobalt);
+  color: var(--cream);
+  border: 3px solid var(--ink);
+  border-radius: 18px;
+  box-shadow: 6px 6px 0 var(--ink);
+  padding: 16px 18px;
+  transform: rotate(.6deg);
+}
+.streak b { font-family: var(--display); font-size: 15px; }
+.streak p { font-size: 13px; opacity: .85; margin-top: 2px; }
+
+/* feed line */
+.feed {
+  margin: 0 auto; max-width: 1180px; width: 100%;
+  padding: 0 clamp(16px, 4vw, 40px) 26px;
+  font-size: 13px; font-weight: 500; opacity: .75;
+  display: flex; gap: 24px; overflow: hidden; white-space: nowrap;
+}
+.feed span b.right { color: var(--mint); }
+.feed span b.wrong { color: var(--coral); }
+
+@media (max-width: 840px) {
+  .stage { grid-template-columns: 1fr; }
+  .board { order: 2; }
+  .round-pill { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vinyl { animation: none; }
+  * { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="logo">ENCORE<span>!</span></div>
+  <div class="room"><span>room</span><span class="code">MOMO-42</span></div>
+  <div class="round-pill">Round 4 of 10 · 2000s night</div>
+</header>
+
+<main class="stage">
+  <section class="play" aria-label="Current round">
+    <span class="prompt-lbl">Now playing · 15s clip</span>
+    <h1>Whose song is this?!</h1>
+    <p class="sub">Artist = 1 pt · Artist + title = 3 pts · First correct = +1 bonus</p>
+
+    <div class="vinyl-wrap">
+      <svg class="timer-ring" viewBox="0 0 104 104" aria-hidden="true">
+        <circle class="track" cx="52" cy="52" r="48"/>
+        <circle class="left" id="ring" cx="52" cy="52" r="48"/>
+      </svg>
+      <svg class="vinyl" viewBox="0 0 200 200" aria-hidden="true">
+        <circle cx="100" cy="100" r="98" fill="#1d1b33"/>
+        <g fill="none" stroke="#34315c" stroke-width="1">
+          <circle cx="100" cy="100" r="88"/><circle cx="100" cy="100" r="80"/>
+          <circle cx="100" cy="100" r="72"/><circle cx="100" cy="100" r="64"/>
+          <circle cx="100" cy="100" r="56"/><circle cx="100" cy="100" r="48"/>
+        </g>
+        <path d="M100 12 a88 88 0 0 1 62 26" stroke="#4b477e" stroke-width="2" fill="none"/>
+        <path d="M38 162 a88 88 0 0 1 -22 -55" stroke="#4b477e" stroke-width="2" fill="none"/>
+        <circle cx="100" cy="100" r="34" fill="#ff5b4a"/>
+        <circle cx="100" cy="100" r="33" fill="none" stroke="#1d1b33" stroke-width="2"/>
+        <circle cx="100" cy="100" r="4.5" fill="#fdf6e9"/>
+      </svg>
+      <div class="time-left"><b id="secs">11</b><span>seconds</span></div>
+    </div>
+
+    <form class="guess" id="guess-form">
+      <input id="guess-input" placeholder="Type artist — or artist, title…" autocomplete="off" aria-label="Your guess"/>
+      <button type="submit">GUESS</button>
+    </form>
+
+    <div class="hint-chips">
+      <button class="hint-chip">💿 Year: <b>2004</b></button>
+      <button class="hint-chip">🎤 One-word artist <b>−1 pt</b></button>
+      <button class="hint-chip">🔁 Replay clip <b>−1 pt</b></button>
+    </div>
+  </section>
+
+  <aside>
+    <div class="board" aria-label="Scoreboard">
+      <h2>Scores <small>ROUND 4</small></h2>
+      <div class="player guessed">
+        <span class="face">🦊</span>
+        <div><div class="name">Sulav</div><div class="status">guessed in 4.2s 🔥</div></div>
+        <span class="delta">+4</span>
+        <span class="pts">23</span>
+      </div>
+      <div class="player guessed">
+        <span class="face">🐯</span>
+        <div><div class="name">Anisha</div><div class="status">guessed in 7.8s</div></div>
+        <span class="delta">+3</span>
+        <span class="pts">21</span>
+      </div>
+      <div class="player">
+        <span class="face">🐼</span>
+        <div><div class="name">Sirish</div><div class="status">typing…</div></div>
+        <span class="pts">17</span>
+      </div>
+      <div class="player">
+        <span class="face">🐸</span>
+        <div><div class="name">Bibek</div><div class="status">still listening</div></div>
+        <span class="pts">12</span>
+      </div>
+    </div>
+    <div class="streak">
+      <b>🔥 Sulav is on a 3-song streak</b>
+      <p>Knock him off — next correct guess steals his bonus point.</p>
+    </div>
+  </aside>
+</main>
+
+<p class="feed">
+  <span>🦊 Sulav: <b class="right">correct!</b> artist + title</span>
+  <span>🐯 Anisha: <b class="right">correct!</b> artist</span>
+  <span>🐸 Bibek guessed “Nickelback” <b class="wrong">— brutally wrong</b></span>
+</p>
+
+<script>
+// countdown + ring sweep (demo loop)
+const ring = document.getElementById('ring');
+const secsEl = document.getElementById('secs');
+const TOTAL = 15;
+let left = 11;
+const C = 2 * Math.PI * 48;
+function paint() {
+  secsEl.textContent = left;
+  ring.style.strokeDashoffset = C * (1 - left / TOTAL);
+}
+paint();
+setInterval(() => { left = left <= 1 ? TOTAL : left - 1; paint(); }, 1000);
+
+// guess feedback
+document.getElementById('guess-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const inp = document.getElementById('guess-input');
+  if (!inp.value.trim()) return;
+  inp.value = '';
+  inp.placeholder = 'Locked in! Waiting for the reveal…';
+});
+</script>
+</body>
+</html>
