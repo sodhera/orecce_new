@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orécce — the wall</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23f6f4ef'/%3E%3Crect x='7' y='5' width='18' height='22' fill='none' stroke='%232a2520' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%23b4552d'/%3E%3C/svg%3E">
+<style>
+:root {
+  --wall: #f6f4ef;
+  --ink: #211d18;
+  --ink-soft: #6f6656;
+  --ink-faint: #a39882;
+  --frame: #2a2520;
+  --mat: #fffef9;
+  --rust: #b4552d;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--wall);
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--rust); outline-offset: 3px; }
+
+/* ————— header ————— */
+header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 34px clamp(22px, 5vw, 72px) 10px;
+}
+.wordmark { font-family: var(--serif); font-size: 26px; letter-spacing: .005em; }
+.wordmark i { font-style: italic; color: var(--rust); }
+.gallery-note {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.tagline {
+  padding: 0 clamp(22px, 5vw, 72px) 8px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--ink-soft);
+}
+
+/* ————— wall ————— */
+main {
+  padding: 34px clamp(22px, 5vw, 72px) 90px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
+  gap: clamp(30px, 4vw, 56px);
+  align-items: start;
+}
+.piece { text-align: center; }
+.frame-btn {
+  display: block;
+  width: 100%;
+  border: 7px solid var(--frame);
+  background: var(--mat);
+  padding: clamp(10px, 1.6vw, 18px);
+  box-shadow:
+    0 1px 2px rgba(33,29,24,.18),
+    0 14px 34px -16px rgba(33,29,24,.38);
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+.frame-btn:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 2px 3px rgba(33,29,24,.16),
+    0 24px 48px -18px rgba(33,29,24,.42);
+}
+.thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10.5;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px rgba(33,29,24,.12);
+}
+.thumb iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 1280px;
+  height: 840px;
+  border: none;
+  transform-origin: top left;
+  pointer-events: none;
+  background: #fff;
+}
+.caption { margin-top: 14px; }
+.caption .t {
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.3;
+}
+.caption .d {
+  margin-top: 3px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--ink-soft);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 18px;
+}
+.empty .how {
+  display: block;
+  margin-top: 14px;
+  font: 12px var(--mono);
+  font-style: normal;
+  color: var(--ink-faint);
+}
+
+/* ————— viewer ————— */
+#viewer {
+  position: fixed;
+  inset: 0;
+  background: rgba(246, 244, 239, .97);
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease;
+}
+#viewer.open { opacity: 1; pointer-events: auto; }
+.viewer-bar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px clamp(16px, 3vw, 40px);
+}
+.viewer-bar .who { min-width: 0; margin-right: auto; }
+.viewer-bar .who .t { font-family: var(--serif); font-size: 17px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.viewer-bar .who .th {
+  font-family: var(--serif); font-style: italic;
+  font-size: 12.5px; color: var(--ink-soft);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.vbtn {
+  flex: none;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  border: 1px solid rgba(33,29,24,.28);
+  border-radius: 999px;
+  padding: 6px 14px;
+  text-decoration: none;
+  transition: color .12s, border-color .12s, background .12s;
+}
+.vbtn:hover { color: var(--ink); border-color: var(--ink); }
+.vbtn.on { background: var(--ink); color: var(--wall); border-color: var(--ink); }
+.viewer-stage {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  padding: 0 clamp(8px, 4vw, 64px) 22px;
+  position: relative;
+}
+.viewer-frame {
+  width: 100%;
+  max-width: 1280px;
+  border: 6px solid var(--frame);
+  background: #fff;
+  box-shadow: 0 24px 60px -20px rgba(33,29,24,.4);
+  transition: max-width .28s ease;
+  margin: 0 auto;
+}
+.viewer-frame.phone { max-width: 402px; }
+.viewer-frame iframe { width: 100%; height: 100%; border: none; display: block; background: #fff; }
+.nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background: var(--mat);
+  border: 1px solid rgba(33,29,24,.22);
+  box-shadow: 0 4px 14px rgba(33,29,24,.16);
+  font-size: 20px;
+  color: var(--ink);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .12s, background .12s;
+}
+.nav-arrow:hover { background: #fff; transform: translateY(-50%) scale(1.06); }
+.nav-arrow.prev { left: clamp(4px, 1.2vw, 18px); }
+.nav-arrow.next { right: clamp(4px, 1.2vw, 18px); }
+.nav-arrow[disabled] { opacity: .25; pointer-events: none; }
+.counter {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .2em;
+  color: var(--ink-faint);
+  background: var(--wall);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+@media (max-width: 640px) {
+  .viewer-bar { flex-wrap: wrap; }
+  .viewer-bar .who { width: 100%; }
+  .nav-arrow { width: 38px; height: 38px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wordmark">Or<i>é</i>cce</div>
+  <div class="gallery-note" id="count-note">the wall</div>
+</header>
+<p class="tagline">Pieces generated by the visual guru. Click a frame; walk the wall with your arrow keys.</p>
+
+<main id="wall" aria-label="Gallery wall"></main>
+
+<div id="viewer" role="dialog" aria-modal="true" aria-label="Piece viewer">
+  <div class="viewer-bar">
+    <div class="who">
+      <div class="t" id="v-title"></div>
+      <div class="th" id="v-thesis"></div>
+    </div>
+    <button class="vbtn on" id="v-desktop">Desktop</button>
+    <button class="vbtn" id="v-phone">Phone</button>
+    <a class="vbtn" id="v-open" target="_blank" rel="noopener">Open ↗</a>
+    <button class="vbtn" id="v-close" aria-label="Close viewer">Esc ✕</button>
+  </div>
+  <div class="viewer-stage">
+    <button class="nav-arrow prev" id="v-prev" aria-label="Previous piece">←</button>
+    <div class="viewer-frame" id="v-frame"><iframe id="v-iframe" title="Piece"></iframe></div>
+    <button class="nav-arrow next" id="v-next" aria-label="Next piece">→</button>
+    <span class="counter" id="v-counter"></span>
+  </div>
+</div>
+
+<script>
+'use strict';
+const $ = (s) => document.querySelector(s);
+let PIECES = [];
+let idx = -1;
+
+async function load() {
+  const r = await fetch('/api/pieces');
+  PIECES = await r.json();
+  $('#count-note').textContent = PIECES.length
+    ? `the wall · ${PIECES.length} piece${PIECES.length > 1 ? 's' : ''}`
+    : 'the wall';
+  renderWall();
+}
+
+function pieceUrl(p) { return `/pieces/${p.slug}/`; }
+
+function renderWall() {
+  const wall = $('#wall');
+  wall.innerHTML = '';
+  if (!PIECES.length) {
+    const d = document.createElement('div');
+    d.className = 'empty';
+    d.innerHTML = 'The wall is empty.<span class="how">ask your agent: “use the orécce skill — generate …” and pieces appear here</span>';
+    wall.appendChild(d);
+    return;
+  }
+  PIECES.forEach((p, i) => {
+    const art = document.createElement('article');
+    art.className = 'piece';
+
+    const btn = document.createElement('button');
+    btn.className = 'frame-btn';
+    btn.setAttribute('aria-label', 'View ' + (p.title || p.slug));
+    btn.addEventListener('click', () => openViewer(i));
+
+    const thumb = document.createElement('div');
+    thumb.className = 'thumb';
+    const ifr = document.createElement('iframe');
+    ifr.loading = 'lazy';
+    ifr.tabIndex = -1;
+    ifr.setAttribute('aria-hidden', 'true');
+    ifr.src = pieceUrl(p);
+    thumb.appendChild(ifr);
+    btn.appendChild(thumb);
+    art.appendChild(btn);
+
+    const cap = document.createElement('div');
+    cap.className = 'caption';
+    const t = document.createElement('div');
+    t.className = 't';
+    t.textContent = p.title || p.slug;
+    const d = document.createElement('div');
+    d.className = 'd';
+    d.textContent = [p.direction && p.direction.name, p.created && p.created.slice(0, 10)]
+      .filter(Boolean).join(' · ');
+    cap.appendChild(t); cap.appendChild(d);
+    art.appendChild(cap);
+
+    wall.appendChild(art);
+    scaleThumb(thumb, ifr);
+  });
+}
+
+function scaleThumb(thumb, ifr) {
+  const fit = () => {
+    const w = thumb.clientWidth;
+    if (w > 0) ifr.style.transform = `scale(${w / 1280})`;
+  };
+  fit();
+  new ResizeObserver(fit).observe(thumb);
+}
+
+function openViewer(i) {
+  idx = i;
+  const p = PIECES[i];
+  $('#v-title').textContent = p.title || p.slug;
+  $('#v-thesis').textContent = (p.direction && p.direction.thesis) || '';
+  $('#v-iframe').src = pieceUrl(p);
+  $('#v-open').href = pieceUrl(p);
+  $('#v-counter').textContent = `${i + 1} / ${PIECES.length}`;
+  $('#v-prev').disabled = i === 0;
+  $('#v-next').disabled = i === PIECES.length - 1;
+  $('#viewer').classList.add('open');
+  $('#v-close').focus();
+}
+
+function closeViewer() {
+  $('#viewer').classList.remove('open');
+  $('#v-iframe').src = 'about:blank';
+  idx = -1;
+}
+
+function step(d) {
+  const n = idx + d;
+  if (n >= 0 && n < PIECES.length) openViewer(n);
+}
+
+$('#v-close').addEventListener('click', closeViewer);
+$('#v-prev').addEventListener('click', () => step(-1));
+$('#v-next').addEventListener('click', () => step(1));
+$('#v-desktop').addEventListener('click', () => {
+  $('#v-frame').classList.remove('phone');
+  $('#v-desktop').classList.add('on'); $('#v-phone').classList.remove('on');
+});
+$('#v-phone').addEventListener('click', () => {
+  $('#v-frame').classList.add('phone');
+  $('#v-phone').classList.add('on'); $('#v-desktop').classList.remove('on');
+});
+
+document.addEventListener('keydown', (e) => {
+  if (idx < 0) return;
+  if (e.key === 'Escape') closeViewer();
+  if (e.key === 'ArrowLeft') step(-1);
+  if (e.key === 'ArrowRight') step(1);
+});
+
+load();
+</script>
+</body>
+</html>

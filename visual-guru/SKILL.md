@@ -82,7 +82,17 @@ translate with `knowledge/intent-translation.md`. Never use the cliché mapping
 - No horizontal overflow at 390px. Hierarchy survives every viewport.
 - Motion is purposeful and fast (most transitions 150–350ms, ease-out); it never blocks.
 
+## The gallery (default deliverable)
+
+When the user asks you to generate, mock up, or show something, the deliverable is
+**pieces hung on the wall**: self-contained mockups written into `gallery/pieces/` in
+this repo, browsed at the viewing page (`npm start` → http://127.0.0.1:4630). Follow
+`workflows/generate-to-gallery.md` — three distinct directions by default, each a
+complete piece with its own thesis. Commit and push pieces so the wall syncs through
+GitHub.
+
 Full knowledge base: `knowledge/foundations.md`, `knowledge/intent-translation.md`,
 `knowledge/product-archetypes.md`, `knowledge/anti-patterns.md`,
-`knowledge/evaluation-rubric.md`. Workflows: `workflows/create-from-scratch.md`,
-`workflows/redesign-existing.md`, `workflows/refine.md`.
+`knowledge/evaluation-rubric.md`. Workflows: `workflows/generate-to-gallery.md`,
+`workflows/create-from-scratch.md`, `workflows/redesign-existing.md`,
+`workflows/refine.md`.

@@ -16,6 +16,7 @@ Input: a product request, often vague ("make me a cool website for my startup").
 6. **Render, judge, fix** — `../knowledge/evaluation-rubric.md`; three highest-impact
    changes; up to three serious rounds.
 
-Output contract when generating a standalone mockup: a single self-contained `index.html`
-(inline CSS/JS; system fonts or Google Fonts only; images as inline SVG, CSS, or data URIs)
-plus a `direction.json`: `{"name": "...", "thesis": "...", "signature": "..."}`.
+Output contract when generating mockup pieces: see `generate-to-gallery.md` — a single
+self-contained `index.html` (inline CSS/JS; system fonts or Google Fonts only; images as
+inline SVG, CSS, or data URIs) plus a `piece.json` carrying the direction's name, thesis,
+and signature.

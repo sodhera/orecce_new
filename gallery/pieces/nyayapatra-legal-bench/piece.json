@@ -1,0 +1,11 @@
+{
+  "title": "Nyayapatra — legal research bench",
+  "prompt": "A legal research workspace for Nepali lawyers. It should feel authoritative, reliable, calm, and modern. Lawyers need to search cases, inspect citations, compare judgments, and return to prior work quickly. Avoid generic Western SaaS styling and ornamental cultural clichés.",
+  "direction": {
+    "name": "Quiet authority",
+    "thesis": "An evidence-dense research bench: warm paper surfaces like law reports, a serif reserved for judicial text, oxblood accents used only for precedent signals — density as respect for the working lawyer.",
+    "signature": "A citation-trail results list where every case shows its precedent strength and treatment history inline, so authority is visible before the case is opened."
+  },
+  "created": "2026-07-18T09:05:00Z",
+  "generatedBy": "hand-directed showcase"
+}

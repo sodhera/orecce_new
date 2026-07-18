@@ -2,9 +2,9 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "studio",
+      "name": "gallery",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["studio/server.js"],
+      "runtimeArgs": ["gallery/serve.js"],
       "port": 4630
     }
   ]
